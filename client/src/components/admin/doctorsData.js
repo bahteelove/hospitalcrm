@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
+import "../style/adminTables.css"
+
 function Doctor() {
   const [doctors, setDoctors] = useState([]);
   const [newDoctorData, setNewDoctorData] = useState({
@@ -101,27 +103,27 @@ function Doctor() {
   };
 
   return (
-    <div>
+    <div className="doctor-container">
       <h1>Doctors</h1>
-      <table>
+      <table className="doctor-table">
         <thead>
           <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Specialization</th>
-            <th>Avatar</th>
-            <th>Action</th> {/* New column for delete button */}
+            <th className="table-heading">ID</th>
+            <th className="table-heading">Name</th>
+            <th className="table-heading">Specialization</th>
+            <th className="table-heading">Avatar</th>
+            <th className="table-heading">Action</th> {/* New column for delete button */}
           </tr>
         </thead>
         <tbody>
           {doctors.map(doctor => (
             <tr key={doctor.doctor_id}>
-              <td>{doctor.doctor_id}</td>
-              <td>{doctor.doctor_name}</td>
-              <td>{doctor.specialization}</td>
-              <td>{doctor.avatar}</td>
-              <td>
-                <button onClick={() => deleteDoctor(doctor.doctor_id, doctor.doctor_name)}>Delete</button>
+              <td className="table-data">{doctor.doctor_id}</td>
+              <td className="table-data">{doctor.doctor_name}</td>
+              <td className="table-data">{doctor.specialization}</td>
+              <td className="table-data">{doctor.avatar}</td>
+              <td className="table-data">
+                <button className="delete-btn" onClick={() => deleteDoctor(doctor.doctor_id, doctor.doctor_name)}>Delete</button>
               </td>
             </tr>
           ))}
@@ -129,21 +131,26 @@ function Doctor() {
       </table>
 
       <h2>Add New Doctor</h2>
-      <form onSubmit={addNewDoctor}>
-        <label>
-          Name:
-          <input type="text" name="doctor_name" value={newDoctorData.doctor_name} onChange={handleInputChangeDoctor} />
-        </label>
-        <label>
-          Specialization:
-          <input type="text" name="specialization" value={newDoctorData.specialization} onChange={handleInputChangeDoctor} />
-        </label>
-        <label>
-          Avatar:
-          <input type="text" name="avatar" value={newDoctorData.avatar} onChange={handleInputChangeDoctor} />
-        </label>
-        <button type="submit">Add Doctor</button>
+      <form className="add-doctor-form" onSubmit={addNewDoctor}>
+        <table className="add-doctor-table">
+          <tbody>
+            <tr>
+              <td className="form-label">Name:</td>
+              <td><input className="form-input" type="text" name="doctor_name" value={newDoctorData.doctor_name} onChange={handleInputChangeDoctor} /></td>
+            </tr>
+            <tr>
+              <td className="form-label">Specialization:</td>
+              <td><input className="form-input" type="text" name="specialization" value={newDoctorData.specialization} onChange={handleInputChangeDoctor} /></td>
+            </tr>
+            <tr>
+              <td className="form-label">Avatar:</td>
+              <td><input className="form-input" type="text" name="avatar" value={newDoctorData.avatar} onChange={handleInputChangeDoctor} /></td>
+            </tr>
+          </tbody>
+        </table>
+        <button className="submit-btn" type="submit">Add Doctor</button>
       </form>
+
     </div>
   );
 }
