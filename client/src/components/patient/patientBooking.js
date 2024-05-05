@@ -133,16 +133,13 @@ const PatientBooking = () => {
             alert('Error adding new time slot:', error);
         }
     };
+
     
     return (
         <div className="booking-container">
             <h1>Welcome, {patient.patient_name}</h1>
+
             <form onSubmit={ handleSubmit }>
-                <label>
-                    Full Name:
-                    <input type="text" value={patient.patient_name} onChange={(e) => setFullName(e.target.value)} />
-                </label>
-                <br />
                 <div className="doctor-cards">
                     <label>Choose Doctor:</label>
                     {doctors && doctors.map((doctor) => (
