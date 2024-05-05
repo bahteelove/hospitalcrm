@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
+import "../style/adminTables.css"
+
 function TimeSlots() {
   const [timeSlots, setTimeSlots] = useState([]);
   const [doctors, setDoctors] = useState([]);
@@ -41,8 +43,17 @@ function TimeSlots() {
 
   const handleInputChangeTimeSlot = (event) => {
     const { name, value } = event.target;
-    setNewTimeSlotData({ ...newTimeSlotData, [name]: value });
+  
+    if (name === 'doctor_name') {
+      const selectedDoctor = doctors.find(doctor => doctor.doctor_name === value);
+      if (selectedDoctor) {
+        setNewTimeSlotData({ ...newTimeSlotData, [name]: value, doctor_id: selectedDoctor.doctor_id });
+      }
+    } else {
+      setNewTimeSlotData({ ...newTimeSlotData, [name]: value });
+    }
   };
+  
 
   const getCurrentDateTime = () => {
     const now = new Date();
@@ -62,10 +73,13 @@ function TimeSlots() {
   const addNewTimeSlot = async () => {
     try {
       // Check if any required field is empty
-      if (!newTimeSlotData.doctor_id || !newTimeSlotData.time) {
+      if (!newTimeSlotData.doctor_name || !newTimeSlotData.time) {
         alert('Doctor ID and time are required fields');
         return;
       }
+      
+      // GET /getselecteddoctor/:doctor_id
+      
 
       if (!newTimeSlotData.status || !newTimeSlotData.patient_id) {
         newTimeSlotData.patient_id = 0;
@@ -107,71 +121,95 @@ function TimeSlots() {
     }
   }
 
-  return (
-    <div>
-      <h1>Time Slots</h1>
-      <table>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Doctor ID</th>
-            <th>Doctor Name</th>
-            <th>Patient ID</th>
-            <th>Patient Name</th>
-            <th>Time</th>
-            <th>Status</th>
-            <th>Status Time</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {timeSlots.map(slot => (
-            <tr key={slot.id}>
-              <td>{slot.id}</td>
-              <td>{slot.doctor_id}</td>
-              <td>{slot.doctor_name}</td>
-              <td>{slot.patient_id}</td>
-              <td>{slot.patient_name}</td>
-              <td>{slot.time}</td>
-              <td>{slot.status}</td>
-              <td>{slot.status_time}</td>
-              <td><button onClick={() => deleteTimeSlot(slot.id)}>Delete</button></td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+  const handleReset = async (id) => {
+    try {
+      const resetSlot = {
+        patient_id: 0, 
+        patient_name: "",
+        status: "not taken",
+        status_time: getCurrentDateTime()
+      };
+  
+      // Send POST request to reset the status of the time slot
+      await axios.post(`http://localhost:3080/changeslotstatus/${id}`, resetSlot);
+  
+      fetchTimeSlots(); // Refresh data
+      alert(`Time Slot with ID ${id} has been reset`);
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+  
 
-      <h2>Add New Time Slot</h2>
-      <form onSubmit={addNewTimeSlot}>
-      <label>
-          Doctor Name:
-          <select name="doctor_name" value={newTimeSlotData.doctor_name} onChange={handleInputChangeTimeSlot}>
-            <option value="">Select Doctor</option>
-            {doctors.map(doctor => (
-              <option key={doctor.doctor_name} value={doctor.doctor_name}>
-                {doctor.doctor_name}
-              </option>
-            ))}
-          </select>
-        </label>
-        <label>
-          Doctor ID:
-          <select name="doctor_id" value={newTimeSlotData.doctor_id} onChange={handleInputChangeTimeSlot}>
-            <option value="">Select Doctor</option>
-            {doctors.map(doctor => (
-              <option key={doctor.doctor_id} value={doctor.doctor_id}>
-                {doctor.doctor_id}
-              </option>
-            ))}
-          </select>
-        </label>
-        <label>
-          Time:
-          <input type="text" name="time" value={newTimeSlotData.time} onChange={handleInputChangeTimeSlot} />
-        </label>
-        <button type="submit">Add Time Slot</button>
-      </form>
-    </div>
+  return (
+    
+  <div className="doctor-container">
+    <h1>Time Slots</h1>
+    <table className="doctor-table">
+      <thead>
+        <tr>
+          <th className="table-heading">ID</th>
+          <th className="table-heading">Doctor ID</th>
+          <th className="table-heading">Doctor Name</th>
+          <th className="table-heading">Patient ID</th>
+          <th className="table-heading">Patient Name</th>
+          <th className="table-heading">Time</th>
+          <th className="table-heading">Status</th>
+          <th className="table-heading">Status Time</th>
+          <th className="table-heading">Action</th>
+          <th className="table-heading">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {timeSlots.map(slot => (
+          <tr key={slot.id}>
+            <td className="table-data">{slot.id}</td>
+            <td className="table-data">{slot.doctor_id}</td>
+            <td className="table-data">{slot.doctor_name}</td>
+            <td className="table-data">{slot.patient_id}</td>
+            <td className="table-data">{slot.patient_name}</td>
+            <td className="table-data">{slot.time}</td>
+            <td className="table-data">{slot.status}</td>
+            <td className="table-data">{slot.status_time}</td>
+            <td className="table-data">
+              <button className="reset-btn" onClick={() => handleReset(slot.id)}>Reset</button>
+            </td>
+            <td className="table-data">
+              <button className="delete-btn" onClick={() => deleteTimeSlot(slot.id)}>Delete</button>
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+
+    <h2>Add New Time Slot</h2>
+    <form className="add-doctor-form" onSubmit={addNewTimeSlot}>
+      <table className="add-doctor-table">
+          <tbody>
+            <tr>
+              <td className="form-label">Select Doctor</td>
+              <td>
+                <select className="form-select" name="doctor_name" value={newTimeSlotData.doctor_name} onChange={handleInputChangeTimeSlot}>
+                  <option value="">Select Doctor</option>
+                  {doctors.map(doctor => (
+                    <option key={doctor.doctor_name} value={doctor.doctor_name}>
+                      {doctor.doctor_name}
+                    </option>
+                  ))}
+                </select>
+              </td>
+            </tr>
+            <tr>
+              <td className="form-label">Time:</td>
+              <td> <input className="form-input" type="text" name="time" value={newTimeSlotData.time} onChange={handleInputChangeTimeSlot} /> </td>
+            </tr>
+            
+          </tbody>
+        </table>
+      <button className="submit-btn" type="submit">Add Time Slot</button>
+    </form>
+  </div>
+
   );
 }
 
