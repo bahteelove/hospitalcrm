@@ -1,19 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
+import "../style/adminTables.css"
+
 function Patient() {
     const [timeSlots, setTimeSlots] = useState([]);
-    const [newTimeSlotData, setNewTimeSlotData] = useState({
-      doctor_id: '',
-      time: '',
-      status: '',
-      patient_id: ''
-    });
   
     const [patients, setPatients] = useState([]);
     const [newPatientData, setNewPatientData] = useState({
       patient_name: '',
-      notes: ''
+      email: '',
+      phone_number: '',
+      birthday: '',
+      avatar: ''
     });
   
     useEffect(() => {
@@ -53,8 +52,8 @@ function Patient() {
   const addNewPatient = async () => {
     try {
       // Check if any required field is empty
-      if (!newPatientData.patient_name) {
-        alert('Patient name is required');
+      if (!newPatientData.patient_name || !newPatientData.email || !newPatientData.phone_number) {
+        alert('Name, Email and Phone Number are required');
         return;
       }
   
@@ -67,10 +66,13 @@ function Patient() {
       // Reset the form fields
       setNewPatientData({
         patient_name: '',
-        notes: ''
+        email: '',
+        phone_number: '',
+        birthday: '',
+        avatar: ''
       });
   
-      console.log('New patient added successfully');
+      alert('New patient added successfully');
     } catch (error) {
       console.error('Error adding new patient:', error);
     }
@@ -91,42 +93,68 @@ function Patient() {
   }
 
   return (
-    <div>
+    
+    <div className="doctor-container">
       <h1>Patients</h1>
-      <table>
+      <table className="doctor-table">
         <thead>
           <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Notes</th>
-            <th>Action</th>
+            <th className="table-heading">ID</th>
+            <th className="table-heading">Name</th>
+            <th className="table-heading">Email</th>
+            <th className="table-heading">Phone Number</th>
+            <th className="table-heading">Birthday</th>
+            <th className="table-heading">Avatar</th>
+            <th className="table-heading">Action</th>
           </tr>
         </thead>
         <tbody>
           {patients.map(patient => (
             <tr key={patient.patient_id}>
-              <td>{patient.patient_id}</td>
-              <td>{patient.patient_name}</td>
-              <td>{patient.notes}</td>
-              <td><button onClick={() => deletePatient(patient.patient_id)}>Delete</button></td>
+              <td className="table-data">{patient.patient_id}</td>
+              <td className="table-data">{patient.patient_name}</td>
+              <td className="table-data">{patient.email}</td>
+              <td className="table-data">{patient.phone_number}</td>
+              <td className="table-data">{patient.birthday}</td>
+              <td className="table-data">{patient.avatar}</td>
+              <td className="table-data"><button className="delete-btn" onClick={() => deletePatient(patient.patient_id)}>Delete</button></td>
             </tr>
           ))}
         </tbody>
       </table>
 
       <h2>Add New Patient</h2>
-      <form onSubmit={addNewPatient}>
-        <label>
-          Name:
-          <input type="text" name="patient_name" value={newPatientData.patient_name} onChange={handleInputChangePatient} />
-        </label>
-        <label>
-          Notes:
-          <textarea name="notes" value={newPatientData.notes} onChange={handleInputChangePatient} />
-        </label>
-        <button type="submit">Add Patient</button>
+      <form className="add-doctor-form" onSubmit={addNewPatient}>
+
+        <table className="add-doctor-table">
+          <tbody>
+            <tr>
+              <td className="form-label">Name</td>
+              <td><input className="form-input" type="text" name="patient_name" value={newPatientData.patient_name} onChange={handleInputChangePatient} /></td>
+            </tr>
+            <tr>
+              <td className="form-label">Email</td>
+              <td><input className="form-input" type="email" name="email" value={newPatientData.email} onChange={handleInputChangePatient} /></td>
+            </tr>
+            <tr>
+              <td className="form-label">Phone Number</td>
+              <td><input className="form-input" type="number" name="phone_number" value={newPatientData.phone_number} onChange={handleInputChangePatient} /></td>
+            </tr>
+            <tr>
+              <td className="form-label">Birthday</td>
+              <td><input className="form-input" type="date" name="birthday" value={newPatientData.birthday} onChange={handleInputChangePatient} /></td>
+            </tr>
+            <tr>
+              <td className="form-label">Avatar</td>
+              <td><input className="form-input" type="text" name="avatar" value={newPatientData.avatar} onChange={handleInputChangePatient} /></td>
+            </tr>
+          </tbody>
+        </table>
+        
+        <button className="submit-btn" type="submit">Add Patient</button>
       </form>
     </div>
+
   );
 }
 

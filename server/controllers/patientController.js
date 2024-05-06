@@ -33,6 +33,36 @@ const createPatientsTable = (req, res) => {
       res.send("<patients> table has created");
     });
   };
+
+// Alter Patient Table to add a column
+// GET /alterpatienttable
+const alterPatientTable = (req, res) => {
+  let sql = 'ALTER TABLE patients ADD COLUMN email VARCHAR(255)';
+  db.query(sql, (err, result) => {
+      if (err) {
+          console.error("Error altering <patient> table:", err.code, "-", err.message);
+          res.status(500).send('<patient> table alteration has failed');
+          return;
+      }
+      console.log("<patient> table has been altered to add column doctor_name");
+      res.send("<patient> table has been altered to add column doctor_name");
+  });
+};
+
+// Delete a column from the patient table
+// GET /deletepatientcolum
+const deletePatientColumn = (req, res) => {
+  let sql = 'ALTER TABLE patients DROP COLUMN notes';
+  db.query(sql, (err, result) => {
+      if (err) {
+          console.error("Error deleting column from patient table:", err.code, "-", err.message);
+          res.status(500).send("Failed to delete column from patient table");
+          return;
+      }
+      console.log("Column has been deleted from the patient table");
+      res.send("Column has been deleted from the patient table");
+  });
+};
   
   // Get Patients Data
   // GET /getpatientstable
@@ -74,10 +104,10 @@ const createPatientsTable = (req, res) => {
   // Add New Patient
   // POST /addnewpatient
   const addNewPatient = (req, res) => {
-    const { patient_name, notes } = req.body;
+    const { patient_name, phone_number, avatar, birthday, email } = req.body;
   
-    const sql = 'INSERT INTO patients (patient_name, notes) VALUES (?, ?)';
-    db.query(sql, [patient_name, notes], (err, result) => {
+    const sql = 'INSERT INTO patients (patient_name, phone_number, avatar, birthday, email) VALUES (?, ?, ?, ?, ?)';
+    db.query(sql, [patient_name, phone_number, avatar, birthday, email], (err, result) => {
       if (err) {
         console.error(`Error adding new patient (${patient_name}):`, err);
         res.status(500).send(`Error adding new patient (${patient_name})`);
@@ -143,5 +173,7 @@ module.exports = {
   addEmptyPatient,
   deletePatient,
   deleteNullPatients,
-  getSelectedPatient
+  getSelectedPatient,
+  alterPatientTable,
+  deletePatientColumn
  }

@@ -53,7 +53,6 @@ function TimeSlots() {
       setNewTimeSlotData({ ...newTimeSlotData, [name]: value });
     }
   };
-  
 
   const getCurrentDateTime = () => {
     const now = new Date();
@@ -139,7 +138,6 @@ function TimeSlots() {
       console.error('Error:', error);
     }
   };
-  
 
   return (
     
@@ -150,9 +148,7 @@ function TimeSlots() {
         <tr>
           <th className="table-heading">ID</th>
           <th className="table-heading">Doctor ID</th>
-          <th className="table-heading">Doctor Name</th>
           <th className="table-heading">Patient ID</th>
-          <th className="table-heading">Patient Name</th>
           <th className="table-heading">Time</th>
           <th className="table-heading">Status</th>
           <th className="table-heading">Status Time</th>
@@ -164,10 +160,8 @@ function TimeSlots() {
         {timeSlots.map(slot => (
           <tr key={slot.id}>
             <td className="table-data">{slot.id}</td>
-            <td className="table-data">{slot.doctor_id}</td>
-            <td className="table-data">{slot.doctor_name}</td>
-            <td className="table-data">{slot.patient_id}</td>
-            <td className="table-data">{slot.patient_name}</td>
+            <td className="table-data">{slot.doctor_id} ({slot.doctor_name}) </td>
+            <td className="table-data">{slot.patient_id} { slot.patient_id !== 0 ? <> ({slot.patient_name}) </> : '' } </td>
             <td className="table-data">{slot.time}</td>
             <td className="table-data">{slot.status}</td>
             <td className="table-data">{slot.status_time}</td>

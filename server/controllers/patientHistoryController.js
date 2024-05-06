@@ -49,6 +49,20 @@ const createPatientHistoryTable = (req, res) => {
     });
   };
   
+// Alter Patient History Table to add doctor_name column
+// GET /alterpatienthistorytable
+const alterPatientHistoryTable = (req, res) => {
+  let sql = 'ALTER TABLE patient_history ADD COLUMN patient_name VARCHAR(255)';
+  db.query(sql, (err, result) => {
+      if (err) {
+          console.error("Error altering <patient_history> table:", err.code, "-", err.message);
+          res.status(500).send('<patient_history> table alteration has failed');
+          return;
+      }
+      console.log("<patient_history> table has been altered to add column doctor_name");
+      res.send("<patient_history> table has been altered to add column doctor_name");
+  });
+};
   
   // DELETE the table (drop table)
   const DropHistoryTable = (req, res) => {
@@ -99,12 +113,12 @@ const createPatientHistoryTable = (req, res) => {
   // Add New Patient History
   // POST //addnewpatienthistory
   const addNewPatientHistory = (req, res) => {
-    const { patient_id, date, issue, advice, recipe, doctor_id } = req.body;
+    const { patient_id, date, issue, advice, recipe, doctor_id, doctor_name, patient_name } = req.body;
   
-    const sql = 'INSERT INTO patient_history (patient_id, date, issue, advice, recipe, doctor_id) VALUES (?, ?, ?, ?, ?, ?)';
-    db.query(sql, [patient_id, date, issue, advice, recipe, doctor_id], (err, result) => {
+    const sql = 'INSERT INTO patient_history (patient_id, date, issue, advice, recipe, doctor_id, doctor_name, patient_name) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
+    db.query(sql, [patient_id, date, issue, advice, recipe, doctor_id, doctor_name, patient_name], (err, result) => {
       if (err) {
-        console.error('Error adding new patient history (${patient_id}, ${date}, ${issue}, ${advice}, ${recipe}, ${doctor_id}):', err);
+        console.error(`Error adding new patient history (${patient_id}, ${date}, ${issue}, ${advice}, ${recipe}, ${doctor_id}):`, err);
         res.status(500).send(`Error adding new patient history (${patient_id}, ${date}, ${issue}, ${advice}, ${recipe}, ${doctor_id})`);
         return;
       }
@@ -190,5 +204,6 @@ module.exports = {
     
     
     DropHistoryTable,
-    changeDateColumnType
+    changeDateColumnType,
+    alterPatientHistoryTable
  }
