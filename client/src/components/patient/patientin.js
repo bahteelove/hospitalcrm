@@ -5,6 +5,7 @@ import "../style/patientin.css"
 
 import PatientHistory from './patientHistory';
 import PatientBooking from './patientBooking';
+import PatientInfo from './patientInfo';
 
 const PatientIn = () => {
     
@@ -21,14 +22,16 @@ const PatientIn = () => {
     return (
         <div className="container">
             <div className="nav-bar">
+                <button className={activeTab === 'info' ? 'active' : ''} onClick={() => handleTabChange('info')}>Info</button>
                 <button className={activeTab === 'booking' ? 'active' : ''} onClick={() => handleTabChange('booking')}>Booking</button>
                 <button className={activeTab === 'history' ? 'active' : ''} onClick={() => handleTabChange('history')}>History</button>
-                <button onClick={ () => getQuit() } > Quit </button>
+                <button onClick={() => getQuit()}>Quit</button>
             </div>
             <div className="content">
-                { activeTab === 'booking' ? ( <PatientBooking /> ) : ( <PatientHistory /> ) }
+                {activeTab === 'info' ? (<PatientInfo />) : (activeTab === 'booking' ? (<PatientBooking />) : (<PatientHistory />))}
             </div>
         </div>
+
     );
 }
 

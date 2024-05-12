@@ -80,7 +80,9 @@ const DoctorPatientReport = (props) => {
             issue: issue,
             advice: advice,
             recipe: recipe,
-            doctor_id: slot.doctor_id
+            doctor_id: slot.doctor_id,
+            doctor_name: slot.doctor_name,
+            patient_name: slot.patient_name
         };
 
         

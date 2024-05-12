@@ -86,6 +86,7 @@ const DoctorHistory = (props) => {
                                     <p>Issue: {visit.issue}</p>
                                     <p>Advice: {visit.advice}</p>
                                     <p>Recipe: {visit.recipe}</p>
+                                    <p>{visit.doctor_name}</p>
                                 </div>
                             )}
                         </li>

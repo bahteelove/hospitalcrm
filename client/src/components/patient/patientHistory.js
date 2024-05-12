@@ -49,7 +49,7 @@ const PatientHistory = () => {
         doc.text(`Issue: ${visit.issue}`, 10, 20);
         doc.text(`Advice: ${visit.advice}`, 10, 30);
         doc.text(`Recipe: ${visit.recipe}`, 10, 40);
-        doc.text(`Doctor: ${visit.doctor_id}`, 10, 50);
+        doc.text(`Doctor: ${visit.doctor_name}`, 10, 50);
         doc.text(`CRM Clinic, official recipe for client`, 10, 60);
 
         doc.save('visit_details.pdf');
@@ -71,7 +71,7 @@ const PatientHistory = () => {
                                     <p>Issue: {visit.issue}</p>
                                     <p>Advice: {visit.advice}</p>
                                     <p>Recipe: {visit.recipe}</p>
-                                    <p>Doctor: {visit.doctor_id}</p>
+                                    <p>Doctor: {visit.doctor_name}</p>
                                     <button onClick={ () => downloadTheRecipe(visit) } > download the recipe </button>
                                 </div>
                             )}

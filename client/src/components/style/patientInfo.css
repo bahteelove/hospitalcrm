@@ -1,0 +1,58 @@
+.patient-info {
+    background-color: #f4f4f4;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+  }
+  
+  .patient-info h2 {
+    font-size: 20px;
+    margin-bottom: 10px;
+  }
+  
+  .patient-info table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .patient-info td {
+    padding: 8px 12px;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .patient-info td:first-child {
+    font-weight: bold;
+  }
+  
+  .patient-info input[type="text"],
+  .patient-info input[type="email"],
+  .patient-info input[type="number"],
+  .patient-info input[type="date"] {
+    width: calc(100% - 100px); /* Adjust as needed */
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+  
+  .patient-info button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 10px;
+    margin-right: 10px; /* Adjust spacing between buttons */
+  }
+  
+  .patient-info button:last-child {
+    margin-right: 0; /* Remove margin from the last button */
+  }
+  
+  .patient-info button:hover {
+    background-color: #0056b3;
+  }
+  

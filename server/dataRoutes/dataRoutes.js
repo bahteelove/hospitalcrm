@@ -35,7 +35,9 @@ const {
     deleteNullPatients,
     getSelectedPatient,
     alterPatientTable,
-    deletePatientColumn
+    deletePatientColumn,
+
+    changePatientInfo
 } = require("../controllers/patientController") 
 const {
     createPatientHistoryTable,
@@ -162,6 +164,10 @@ router.route('/getselectedpatient/:patient_id').get(getSelectedPatient);
 // Add New Patient
 // POST /addnewpatient
 router.route('/addnewpatient').post(addNewPatient)
+
+// change patient info
+  // POST /changepatientinfo/:patient_id
+router.route('/changepatientinfo/:patient_id').post(changePatientInfo)
 
 // Add Empty Patient
 // POST //addemptypatient

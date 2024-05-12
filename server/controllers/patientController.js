@@ -117,6 +117,24 @@ const deletePatientColumn = (req, res) => {
       res.send(`new patient (${patient_name}) added successfully`);
     });
   };
+
+  // change patient info
+  // POST /changepatientinfo/:patient_id
+  const changePatientInfo = (req, res) => {
+    const { patient_id } = req.params;
+    const { patient_name, phone_number, avatar, birthday, email } = req.body;
+  
+    const sql = 'UPDATE patients SET patient_name = ?, phone_number = ?, avatar = ?, birthday = ?, email = ? WHERE patient_id = ?';
+    db.query(sql, [patient_name, phone_number, avatar, birthday, email, patient_id], (err, result) => {
+      if (err) {
+        console.error(`Error changing the patient (${patient_name}) with ID ${patient_id}:`, err);
+        res.status(500).send(`Error changing the patient (${patient_name}) with ID ${patient_id}`);
+        return;
+      }
+      console.log(`new patient (${patient_name}) with ID ${patient_id} added successfully`);
+      res.send(`new patient (${patient_name}) with ID ${patient_id} added successfully`);
+    });
+  };
   
   // Add Empty Patient
   // POST //addemptypatient
@@ -175,5 +193,7 @@ module.exports = {
   deleteNullPatients,
   getSelectedPatient,
   alterPatientTable,
-  deletePatientColumn
+  deletePatientColumn,
+
+  changePatientInfo
  }
