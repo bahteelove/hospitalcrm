@@ -90,7 +90,7 @@ const PatientInfo = () => {
         <>
             <h2>Patient Information</h2>
             {patient && status === "info" ?
-                <div className="patient-info">
+                <div className="patient-information">
                     <br></br>
                     <table>
                         <tbody>
@@ -115,7 +115,7 @@ const PatientInfo = () => {
                     <button onClick={ () => setStatus('') }>Change Info</button>
                 </div>
                 :
-                <div className="patient-info">
+                <div className="patient-information">
                     <table className="add-doctor-table">
                         <tbody>
                             <tr>

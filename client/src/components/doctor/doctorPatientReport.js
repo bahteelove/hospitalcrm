@@ -99,7 +99,7 @@ const DoctorPatientReport = (props) => {
             });
 
 
-        axios.get(`http://localhost:3080/changestatusnottaken/${slotId}`)
+        //axios.get(`http://localhost:3080/changestatusnottaken/${slotId}`)
 
         alert("Recipe has added. Good job")
         //console.log( slot[0] )
@@ -107,10 +107,8 @@ const DoctorPatientReport = (props) => {
     };
 
     const handleMarkAsDone = () => {
-        axios.post(`http://localhost:3080/changeslotstatus/${slotId}`, { status: "done", status_time: getCurrentDateTime() })
-            .then(response => {
-                
-            })
+        axios.post(`http://localhost:3080/changeslotstatus/${slotId}`, { patient_id: selectedPatient.patient_id, patient_name: selectedPatient.patient_name, status: "done", status_time: getCurrentDateTime() })
+            
             .catch(error => {
                 console.error('Error adding new patient history:', error);
             });
@@ -124,29 +122,34 @@ const DoctorPatientReport = (props) => {
         <>
             <div className="data-inputs">
                 <label> Patient name: { selectedPatient.patient_name } </label><br/>
-                <label> Issue: </label>
-                <input
-                    type="text"
-                    value={issue}
-                    onChange={(e) => setIssue(e.target.value)}
-                    placeholder="Issue"
-                />
-                <label> Advice: </label>
-                <input
-                    type="text"
-                    value={advice}
-                    onChange={(e) => setAdvice(e.target.value)}
-                    placeholder="Advice"
-                />
-                <label> Recipe: </label>
-                <input
-                    type="text"
-                    value={recipe}
-                    onChange={(e) => setRecipe(e.target.value)}
-                    placeholder="Recipe"
-                />
-                <button onClick={ handleSaveData } > Save </button>
-                <button onClick={ handleMarkAsDone } > Mark as Done </button>
+                <div>
+                    <label> Issue: </label>
+                    <input
+                        type="text"
+                        value={issue}
+                        onChange={(e) => setIssue(e.target.value)}
+                        placeholder="Issue"
+                    />
+                    <label> Advice: </label>
+                    <input
+                        type="text"
+                        value={advice}
+                        onChange={(e) => setAdvice(e.target.value)}
+                        placeholder="Advice"
+                    />
+                    <label> Recipe: </label>
+                    <input
+                        type="text"
+                        value={recipe}
+                        onChange={(e) => setRecipe(e.target.value)}
+                        placeholder="Recipe"
+                    />
+                    <button onClick={ handleSaveData } > Save </button>
+                    <button onClick={ handleMarkAsDone } > Mark as Done </button>
+                </div>
+
+                {}
+                
             </div>
         </>
     );

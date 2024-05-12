@@ -38,69 +38,38 @@ const DoctorReport = () => {
           });
     }; 
 
-    /*
-    const handleDownloadPDF = () => {
+    
+    const handleDownloadReport = async() => {
         const doc = new jsPDF();
-        doc.text("Doctor's Daily Report" + new Date, 10, 10);
-        doc.text("Doctor: " + selectedDoctor.doctor_name, 10, 20);
+        doc.text("Appointment Report", 10, 10);
     
-        let appointmentCount = 0; // Counter for numbering appointments
+        timeSlots.forEach((slot, index) => {
+            const yPos = 20 + (index * 30);
     
-        selectedDoctor.timeSlots.forEach((slot, index) => {
-            appointmentCount++; // Increment the appointment count
-            if (slot.patient_id !== 0) {
-                patientsData.forEach(patient => {
-                    if (patient.patient_id === slot.patient_id) {
-                        const lastVisit = patient.history[0];
-                        if (lastVisit && isToday(lastVisit.date)) {
-                            // Add numbering before patient card
-                            doc.text(appointmentCount + ". Patient Name: " + patient.patient_name, 10, 30 + (index) * 50);
-                            doc.text("Date: " + lastVisit.date, 20, 40 + (index) * 50);
-                            doc.text("Issue: " + lastVisit.issue, 20, 50 + (index) * 50);
-                            doc.text("Advice: " + lastVisit.advice, 20, 60 + (index) * 50);
-                            doc.text("Recipe: " + lastVisit.recipe, 20, 70 + (index) * 50);
-                        } 
-                    }
-                });
-            } else {
-                // If no appointment, write NO APPOINTMENT
-                doc.text(appointmentCount + ". NO APPOINTMENT", 10, 30 + index * 50);
+            if (slot.status === "done" || slot.status === "taken") {
+                doc.text(`Patient Name: ${slot.patient_name}`, 10, yPos);
+                doc.text(`Time: ${slot.time}`, 10, yPos + 10);
+                doc.text(`Status: ${slot.status}`, 10, yPos + 20);
+                doc.text(`Status Time: ${slot.status_time}`, 10, yPos + 30);
+            }
+            else {
+                doc.text(`Patient Name: -`, 10, yPos);
+                doc.text(`Time: ${slot.time}`, 10, yPos + 10);
+                doc.text(`Status: ${slot.status}`, 10, yPos + 20);
+                doc.text(`Status Time: -`, 10, yPos + 30);
+            }
+
+            axios.get(`http://localhost:3080/changestatusnottaken/${slot.id}`)
+
+    
+            if (index !== timeSlots.length - 1) {
+                doc.addPage(); // Add a new page for the next appointment
             }
         });
     
-        doc.save("doctor_report.pdf");
-        handleCloseSlot();
+        doc.save("appointment_report.pdf");
+        window.location.reload()
     };
-
-    // Function to handle closing the selected time slot
-    const handleCloseSlot = () => {
-        const updatedDoctorsData = doctorsData.map(doctor => {
-            if (doctor.doctor_id === parseInt(doctorId)) {
-                const updatedTimeSlots = doctor.timeSlots.map(slot => {
-                        return {
-                            ...slot,
-                            status: "not taken",
-                            patient_id: 0
-                        };
-                });
-                return {
-                    ...doctor,
-                    timeSlots: updatedTimeSlots
-                };
-            }
-            return doctor;
-        });
-
-        const updatedData = {
-            doctors: updatedDoctorsData,
-            patients: patientsData
-        };
-        localStorage.setItem(`${dataName}`, JSON.stringify(updatedData));
-
-        window.location.reload();
-
-    };
-    */
 
     return (
         <div className="doctor-report-container">
@@ -114,15 +83,15 @@ const DoctorReport = () => {
                             {timeSlots.map((slot, index) => (
                                 <li key={index}>
                                     <span>{slot.time}</span>
-                                    <p> {slot.patient_name ? slot.patient_name : slot.status} </p>
-                                    <p> {slot.status === "done" ? slot.status : 'waiting'} </p>
+                                    <p> {slot.patient_name ? `Waiting ${slot.patient_name}` : slot.status} </p>
+                                    <p> {slot.status === "done" ? 'Appoitment has been finished' : ''} </p>
                                 </li>
                             ))}
                         </ul>
                     </div>
                 </div>
             )}
-            <button className='down' onClick={() => {}}>Close the shift and Download Report </button>
+            <button className='down' onClick={ handleDownloadReport }>Close the shift and Download Report </button>
         </div>
     );
 };

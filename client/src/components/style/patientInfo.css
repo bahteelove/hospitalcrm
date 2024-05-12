@@ -1,4 +1,4 @@
-.patient-info {
+.patient-information {
     background-color: #f4f4f4;
     padding: 20px;
     border-radius: 5px;
@@ -6,29 +6,29 @@
     margin-bottom: 20px;
   }
   
-  .patient-info h2 {
+  .patient-information h2 {
     font-size: 20px;
     margin-bottom: 10px;
   }
   
-  .patient-info table {
+  .patient-information table {
     width: 100%;
     border-collapse: collapse;
   }
   
-  .patient-info td {
+  .patient-information td {
     padding: 8px 12px;
     border-bottom: 1px solid #ddd;
   }
   
-  .patient-info td:first-child {
+  .patient-information td:first-child {
     font-weight: bold;
   }
   
-  .patient-info input[type="text"],
-  .patient-info input[type="email"],
-  .patient-info input[type="number"],
-  .patient-info input[type="date"] {
+  .patient-information input[type="text"],
+  .patient-information input[type="email"],
+  .patient-information input[type="number"],
+  .patient-information input[type="date"] {
     width: calc(100% - 100px); /* Adjust as needed */
     padding: 8px;
     border: 1px solid #ccc;
@@ -36,7 +36,7 @@
     box-sizing: border-box;
   }
   
-  .patient-info button {
+  .patient-information button {
     background-color: #007bff;
     color: #fff;
     border: none;
@@ -48,11 +48,11 @@
     margin-right: 10px; /* Adjust spacing between buttons */
   }
   
-  .patient-info button:last-child {
+  .patient-information button:last-child {
     margin-right: 0; /* Remove margin from the last button */
   }
   
-  .patient-info button:hover {
+  .patient-information button:hover {
     background-color: #0056b3;
   }
   
