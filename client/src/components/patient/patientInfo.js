@@ -9,10 +9,7 @@ const PatientInfo = () => {
 
     const [status, setStatus] = useState('info');
 
-    const [newFullName, setNewFullName] = useState('');
-    const [newEmail, setNewEmail] = useState('');
-    const [newPhone, setNewPhone] = useState('');
-    const [newBirthDate, setNewBirthDate] = useState('');
+    const [timeSlotsData, setTimeSlotsData] = useState([]);
 
     const [newPatientData, setNewPatientData] = useState({
         patient_name: '',
@@ -26,7 +23,18 @@ const PatientInfo = () => {
 
     useEffect(() => {
         fetchPatient();
+        fetchTimeSlots();
     }, []);
+
+    const fetchTimeSlots = () => {
+        axios.get(`http://localhost:3080/getTimeSlotsForSelectedPatient/${patientId}`)
+          .then(response => {
+            setTimeSlotsData(response.data);
+          })
+          .catch(error => {
+            console.error('Error fetching time slots:', error);
+          });
+    };  
 
     const fetchPatient = () => {
         axios.get(`http://localhost:3080/getselectedpatient/${patientId}`)
@@ -52,6 +60,13 @@ const PatientInfo = () => {
       
         return formattedDateTime;
     }
+
+    const isUpcoming = (statusTime) => {
+        const currentTime = new Date();
+        const appointmentTime = new Date(statusTime);
+        return appointmentTime > currentTime;
+    };
+
     
     const handleInputChangePatient = (event) => {
         const { name, value } = event.target;
@@ -88,59 +103,75 @@ const PatientInfo = () => {
     
     return (
         <>
-            <h2>Patient Information</h2>
-            {patient && status === "info" ?
-                <div className="patient-information">
-                    <br></br>
-                    <table>
-                        <tbody>
-                            <tr>
-                                <td><strong>Full Name:</strong></td>
-                                <td>{patient.patient_name}</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Birth Date:</strong></td>
-                                <td>{patient.birthday}</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Email:</strong></td>
-                                <td>{patient.email}</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Phone:</strong></td>
-                                <td>{patient.phone_number}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <button onClick={ () => setStatus('') }>Change Info</button>
+            <div>
+                <h2>Patient Information</h2>
+                {patient && status === "info" ?
+                    <div className="patient-information">
+                        <br></br>
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Full Name:</strong></td>
+                                    <td>{patient.patient_name}</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Birth Date:</strong></td>
+                                    <td>{patient.birthday}</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Email:</strong></td>
+                                    <td>{patient.email}</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Phone:</strong></td>
+                                    <td>{patient.phone_number}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <button onClick={ () => setStatus('') }>Change Info</button>
+                    </div>
+                    :
+                    <div className="patient-information">
+                        <table className="add-doctor-table">
+                            <tbody>
+                                <tr>
+                                    <td>Name</td>
+                                    <td><input type="text" name="patient_name" placeholder={patient.patient_name} value={newPatientData.patient_name} onChange={handleInputChangePatient} /></td>
+                                </tr>
+                                <tr>
+                                    <td>Email</td>
+                                    <td><input type="email" name="email" placeholder={patient.email} value={newPatientData.email} onChange={handleInputChangePatient} /></td>
+                                </tr>
+                                <tr>
+                                    <td >Phone Number</td>
+                                    <td><input type="number" name="phone_number" placeholder={patient.phone_number} value={newPatientData.phone_number} onChange={handleInputChangePatient} /></td>
+                                </tr>
+                                <tr>
+                                    <td >Birthday</td>
+                                    <td><input type="date" name="birthday" placeholder={patient.birthday} value={newPatientData.birthday} onChange={handleInputChangePatient} /></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                        <button onClick={ handlePatientChanges }>Save</button>
+                        <button onClick={ () => setStatus('info') }>Cancel</button>
+                    </div>
+                }
+            </div>
+            <div className="upcoming-appointments-panel">
+                <h2>Upcoming Appointments</h2>
+                <div className="appointments-list">
+                    {timeSlotsData.map(slot => (
+                        <div key={slot.id} className="appointment-item">
+                            <div className="doctor-info">
+                                <span className="doctor-name">{slot.doctor_name}</span>
+                                <span className="time">{slot.time}</span>
+                            </div>
+                            <span className={`status ${slot.status}`}>{slot.status}</span>
+                        </div>
+                    ))}
                 </div>
-                :
-                <div className="patient-information">
-                    <table className="add-doctor-table">
-                        <tbody>
-                            <tr>
-                                <td>Name</td>
-                                <td><input type="text" name="patient_name" placeholder={patient.patient_name} value={newPatientData.patient_name} onChange={handleInputChangePatient} /></td>
-                            </tr>
-                            <tr>
-                                <td>Email</td>
-                                <td><input type="email" name="email" placeholder={patient.email} value={newPatientData.email} onChange={handleInputChangePatient} /></td>
-                            </tr>
-                            <tr>
-                                <td >Phone Number</td>
-                                <td><input type="number" name="phone_number" placeholder={patient.phone_number} value={newPatientData.phone_number} onChange={handleInputChangePatient} /></td>
-                            </tr>
-                            <tr>
-                                <td >Birthday</td>
-                                <td><input type="date" name="birthday" placeholder={patient.birthday} value={newPatientData.birthday} onChange={handleInputChangePatient} /></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    
-                    <button onClick={ handlePatientChanges }>Save</button>
-                    <button onClick={ () => setStatus('info') }>Cancel</button>
-                </div>
-            }
+            </div>
         </>
     );
 

@@ -55,4 +55,57 @@
   .patient-information button:hover {
     background-color: #0056b3;
   }
+
+  .upcoming-appointments-panel {
+    background-color: #f7f7f7;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.upcoming-appointments-panel h3 {
+    margin-bottom: 10px;
+}
+
+.appointments-list {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.appointment-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #ddd;
+    width: 50%;
+}
+
+.doctor-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.doctor-name {
+    font-weight: bold;
+}
+
+.status {
+    text-transform: uppercase;
+    font-size: 12px;
+    padding: 4px 8px;
+    border-radius: 4px;
+}
+
+.status.taken {
+    background-color: #f9cfd7;
+    color: #c92a2a;
+}
+
+.status.done {
+    background-color: #d4f1cd;
+    color: #1d8127;
+}
+
   

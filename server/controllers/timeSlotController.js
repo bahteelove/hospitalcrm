@@ -95,6 +95,27 @@ const DropTimeSlotsTable = (req, res) => {
       res.status(200).json(result);
     });
   };
+
+  // to get timeSlots for a selected patient
+  // GET /getTimeSlotsForSelectedPatient/:patient_id
+  const getTimeSlotsForSelectedPatient = (req, res) => {
+    const { patient_id } = req.params;
+  
+    const sql = 'SELECT * FROM time_slots WHERE patient_id = ?';
+    db.query(sql, [patient_id], (err, result) => {
+      if (err) {
+        console.error(`Error fetching time slots for patient (${patient_id}):`, err.code, "-", err.message);
+        res.status(500).send(`Failed to fetch time slots for patient (${patient_id})`);
+        return;
+      }
+      if (result.length === 0) {
+        console.log(`No time slots found for patient with ID ${patient_id}`);
+        res.status(404).send(`No time slots found for patient with ID ${patient_id}`);
+        return;
+      }
+      res.status(200).json(result);
+    });
+  };
   
   // to get timeSlots by DateTime
   // GET /gettimeslotbydatetime/
@@ -296,5 +317,7 @@ module.exports = {
     DropTimeSlotsTable,
     getTimeSlotsByID,
     changeStatus,
-    getTimeSlotByDateTime
+    getTimeSlotByDateTime,
+
+    getTimeSlotsForSelectedPatient
  }

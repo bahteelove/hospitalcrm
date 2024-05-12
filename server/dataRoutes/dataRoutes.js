@@ -24,7 +24,8 @@ const {
     DropTimeSlotsTable,
     getTimeSlotsByID,
     changeStatus,
-    getTimeSlotByDateTime
+    getTimeSlotByDateTime,
+    getTimeSlotsForSelectedPatient
 } = require("../controllers/timeSlotController")
 const {
     createPatientsTable,
@@ -122,6 +123,10 @@ router.route('/changeslotstatus/:id').post(changeStatus);
 
 // GET /changestatusnottaken/:id
 router.route('/changestatusnottaken/:id').get(changeStatusNotTaken);
+
+// to get timeSlots for a selected patient
+// GET /getTimeSlotsForSelectedPatient/:patient_id
+router.route('/getTimeSlotsForSelectedPatient/:patient_id').get(getTimeSlotsForSelectedPatient);
 
 // Add Time Slot
 // POST /addnewtimeslot
