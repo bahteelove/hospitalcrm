@@ -1,12 +1,26 @@
-/* Additional CSS */
-
-/* Style for buttons in the admin panel */
-.module-button {
-  display: inline-block;
-  margin-right: 10px;
+.admin-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
 }
 
-/* Style for active tab button */
-.active {
+.module-button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  margin: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.module-button.active {
+  background-color: #0056b3;
+}
+
+.module-button:hover {
   background-color: #0056b3;
 }

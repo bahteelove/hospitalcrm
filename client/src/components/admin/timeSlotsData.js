@@ -183,7 +183,7 @@ function TimeSlots() {
             <tr>
               <td className="form-label">Select Doctor</td>
               <td>
-                <select className="form-select" name="doctor_name" value={newTimeSlotData.doctor_name} onChange={handleInputChangeTimeSlot}>
+                <select className="form-input" name="doctor_name" value={newTimeSlotData.doctor_name} onChange={handleInputChangeTimeSlot}>
                   <option value="">Select Doctor</option>
                   {doctors.map(doctor => (
                     <option key={doctor.doctor_name} value={doctor.doctor_name}>

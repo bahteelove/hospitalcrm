@@ -150,6 +150,7 @@ const PatientBooking = () => {
                                 <p>{doctor.specialization}</p>
                             </div>
                             <input
+                                className='patient-booking-input'
                                 type="radio"
                                 name="doctor"
                                 value={doctor.doctor_id}
@@ -175,6 +176,7 @@ const PatientBooking = () => {
                                 >
                                     <p>{timeSlot.time}</p>
                                     <input
+                                        className='patient-booking-input'
                                         type="radio"
                                         name="time"
                                         value={timeSlot.time}
@@ -191,7 +193,7 @@ const PatientBooking = () => {
                     </div>
                 )}
     
-                <button type="submit">Book Appointment</button>
+                <button className='patient-booking-button' type="submit">Book Appointment</button>
             </form>
         </div>
     );

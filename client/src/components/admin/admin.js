@@ -12,7 +12,7 @@ function Admin() {
   const [activeTab, setActiveTab] = useState("");
 
   return (
-    <div className="container">
+    <div className="admin-container">
       <button className={`module-button ${activeTab === "Doctor" ? "active" : ""}`} onClick={() => setActiveTab("Doctor")}>Doctor</button>
       <button className={`module-button ${activeTab === "TimeSlots" ? "active" : ""}`} onClick={() => setActiveTab("TimeSlots")}>Time Slots</button>
       <button className={`module-button ${activeTab === "Patient" ? "active" : ""}`} onClick={() => setActiveTab("Patient")}>Patient</button>

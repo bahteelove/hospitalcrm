@@ -124,25 +124,28 @@ const DoctorPatientReport = (props) => {
                 <label> Patient name: { selectedPatient.patient_name } </label><br/>
                 <div>
                     <input
+                        className='doctor-patient-report-input'
                         type="text"
                         value={issue}
                         onChange={(e) => setIssue(e.target.value)}
                         placeholder="Issue"
                     />
                     <input
+                        className='doctor-patient-report-input'
                         type="text"
                         value={advice}
                         onChange={(e) => setAdvice(e.target.value)}
                         placeholder="Advice"
                     />
                     <input
+                        className='doctor-patient-report-input'
                         type="text"
                         value={recipe}
                         onChange={(e) => setRecipe(e.target.value)}
                         placeholder="Recipe"
                     />
-                    <button onClick={ handleSaveData } > Save </button>
-                    <button onClick={ handleMarkAsDone } > Mark as Done </button>
+                    <button className='doctor-patient-report-button' onClick={ handleSaveData } > Save </button>
+                    <button className='doctor-patient-report-button' onClick={ handleMarkAsDone } > Mark as Done </button>
                 </div>
 
                 {}

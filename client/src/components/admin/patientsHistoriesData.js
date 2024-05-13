@@ -164,7 +164,7 @@ function PatientHistory() {
             <tr>
               <td className="form-label">Patient ID</td>
               <td className="form-select">
-                <select className="form-select" name="patient_name" value={newHistoryData.patient_name} onChange={handleInputChange}>
+                <select className="form-input" name="patient_name" value={newHistoryData.patient_name} onChange={handleInputChange}>
                   <option value="">Select Patient</option>
                   {patients.map(patient => (
                     <option key={patient.patient_name} value={patient.patient_name}>
@@ -201,7 +201,7 @@ function PatientHistory() {
             <tr>
               <td className="form-label">Doctor ID (Doctor Name)</td>
               <td className="form-select">
-                <select className="form-select" name="doctor_name" value={newHistoryData.doctor_name} onChange={handleInputChange}>
+                <select className="form-input" name="doctor_name" value={newHistoryData.doctor_name} onChange={handleInputChange}>
                   <option value="">Select Doctor</option>
                   {doctors.map(doctor => (
                     <option key={doctor.doctor_name} value={doctor.doctor_name}>

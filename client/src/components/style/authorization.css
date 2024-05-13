@@ -1,0 +1,58 @@
+.auth-container {
+    background-color: #f8f8f8;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    max-width: 400px; /* Set maximum width for better readability on larger screens */
+    margin: 0 auto; /* Center the container horizontally */
+}
+
+.auth-container h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.auth-input {
+    width: 100%;
+    margin-bottom: 15px;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+.auth-input::placeholder {
+    color: #999; /* Placeholder text color */
+}
+
+.auth-button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.auth-button:hover {
+    background-color: #0056b3;
+}
+
+.error {
+    color: red;
+    margin-top: 10px;
+}
+
+.auth-container a {
+    color: #007bff; /* Link color */
+    text-decoration: none; /* Remove underline */
+    margin-top: 10px; /* Add space between button and link */
+    display: block; /* Make link a block element for better spacing */
+}
+
+.auth-container a:hover {
+    text-decoration: underline; /* Underline on hover */
+}

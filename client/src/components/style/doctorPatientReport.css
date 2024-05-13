@@ -9,7 +9,7 @@
     margin-bottom: 5px;
 }
 
-.data-inputs input {
+.doctor-patient-report-input {
     display: block;
     padding: 8px;
     width: 100%;
@@ -21,7 +21,7 @@
     margin-bottom: 10px;
 }
 
-.data-inputs button {
+.doctor-patient-report-button {
     padding: 10px 20px;
     margin-right: 10px;
     border: none;
@@ -29,16 +29,4 @@
     color: #fff;
     cursor: pointer;
     border-radius: 5px;
-}
-
-.data-inputs button.close-btn {
-    background-color: #dc3545;
-}
-
-.data-inputs button:hover {
-    background-color: #0056b3;
-}
-
-.data-inputs button.close-btn:hover {
-    background-color: #c82333;
 }

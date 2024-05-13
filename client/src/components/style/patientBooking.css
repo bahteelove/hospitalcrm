@@ -15,7 +15,7 @@ label {
     color: #333;
 }
 
-input[type="text"] {
+.patient-booking-input {
     width: 100%; /* Full width on mobile */
     padding: 10px;
     font-size: 16px;
@@ -81,7 +81,7 @@ input[type="text"] {
     color: #333;
 }
 
-button[type="submit"] {
+.patient-booking-button {
     background-color: #007bff;
     color: #fff;
     border: none;
@@ -110,14 +110,6 @@ button[type="submit"] {
         margin-bottom: 10px;
         font-size: 16px;
         color: #333;
-    }
-    
-    input[type="text"] {
-        width: calc(50% - 40px);
-        padding: 10px;
-        font-size: 16px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
     }
     
     .doctor-cards {
@@ -186,11 +178,11 @@ button[type="submit"] {
         background-color: #ffcccc; /* Light red for taken slots */
     }
     
-    button[type="submit"] {
+    .patient-booking-button {
         margin: 20px;
     }
     
-    button[type="submit"] {
+    .patient-booking-button {
         background-color: #007bff;
         color: #fff;
         border: none;
@@ -201,7 +193,7 @@ button[type="submit"] {
         width: 30%;
     }
     
-    button[type="submit"]:hover {
+    .patient-booking-button:hover {
         background-color: #0056b3;
     }
 }

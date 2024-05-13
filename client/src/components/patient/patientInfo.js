@@ -129,7 +129,7 @@ const PatientInfo = () => {
                                 </tr>
                             </tbody>
                         </table>
-                        <button onClick={ () => setStatus('') }>Change Info</button>
+                        <button className='patient-information-button' onClick={ () => setStatus('') }>Change Info</button>
                     </div>
                     :
                     <div className="patient-information">
@@ -138,25 +138,25 @@ const PatientInfo = () => {
                             <tbody>
                                 <tr>
                                     <td>Name</td>
-                                    <td><input type="text" name="patient_name" placeholder={patient.patient_name} value={newPatientData.patient_name} onChange={handleInputChangePatient} /></td>
+                                    <td><input className='patient-information-change-input' type="text" name="patient_name" placeholder={patient.patient_name} value={newPatientData.patient_name} onChange={handleInputChangePatient} /></td>
                                 </tr>
                                 <tr>
                                     <td>Email</td>
-                                    <td><input type="email" name="email" placeholder={patient.email} value={newPatientData.email} onChange={handleInputChangePatient} /></td>
+                                    <td><input className='patient-information-change-input' type="email" name="email" placeholder={patient.email} value={newPatientData.email} onChange={handleInputChangePatient} /></td>
                                 </tr>
                                 <tr>
                                     <td >Phone Number</td>
-                                    <td><input type="number" name="phone_number" placeholder={patient.phone_number} value={newPatientData.phone_number} onChange={handleInputChangePatient} /></td>
+                                    <td><input className='patient-information-change-input' type="number" name="phone_number" placeholder={patient.phone_number} value={newPatientData.phone_number} onChange={handleInputChangePatient} /></td>
                                 </tr>
                                 <tr>
                                     <td >Birthday</td>
-                                    <td><input type="date" name="birthday" placeholder={patient.birthday} value={newPatientData.birthday} onChange={handleInputChangePatient} /></td>
+                                    <td><input className='patient-information-change-input' type="date" name="birthday" placeholder={patient.birthday} value={newPatientData.birthday} onChange={handleInputChangePatient} /></td>
                                 </tr>
                             </tbody>
                         </table>
                         
-                        <button onClick={ handlePatientChanges }>Save</button>
-                        <button onClick={ () => setStatus('info') }>Cancel</button>
+                        <button className='patient-information-button' onClick={ handlePatientChanges }>Save</button>
+                        <button className='patient-information-button' onClick={ () => setStatus('info') }>Cancel</button>
                     </div>
                 }
             </div>

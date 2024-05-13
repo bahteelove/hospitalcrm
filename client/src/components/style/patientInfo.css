@@ -25,18 +25,15 @@
     font-weight: bold;
   }
   
-  .patient-information input[type="text"],
-  .patient-information input[type="email"],
-  .patient-information input[type="number"],
-  .patient-information input[type="date"] {
-    width: calc(100% - 100px); /* Adjust as needed */
+  .patient-information-change-input {
+    width: calc(100% - 0px); /* Adjust as needed */
     padding: 8px;
     border: 1px solid #ccc;
     border-radius: 4px;
     box-sizing: border-box;
   }
   
-  .patient-information button {
+  .patient-information-button {
     background-color: #007bff;
     color: #fff;
     border: none;
@@ -48,11 +45,11 @@
     margin-right: 10px; /* Adjust spacing between buttons */
   }
   
-  .patient-information button:last-child {
+  .patient-information-button:last-child {
     margin-right: 0; /* Remove margin from the last button */
   }
   
-  .patient-information button:hover {
+  .patient-information-button:hover {
     background-color: #0056b3;
   }
 

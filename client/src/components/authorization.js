@@ -5,7 +5,14 @@ import './style/authorization.css';
 
 const Authorization = () => {
     const navigate = useNavigate();
+
     const [userId, setUsertId] = useState('');
+
+    const [activeTab, setActiveTab] = useState('sing in')
+
+    const [userEmail, setUserEmail] = useState('')
+    const [userPassword, setUserPassword] = useState('')
+
     const [error, setError] = useState('');
 
     const handleInputChange = (event) => {
@@ -39,20 +46,56 @@ const Authorization = () => {
 
     return (
         <>
-            <h1>Welcome to the online hospital system</h1>
-            <div className="container">
-                <h1>Enter ID</h1>
-                <form onSubmit={handleSubmit}>
-                    <input
-                        type="text"
-                        placeholder="Enter ID"
-                        value={userId}
-                        onChange={handleInputChange}
-                        required
-                    />
-                    <button type="submit">Submit</button>
-                    {error && <p className="error">{error}</p>}
-                </form>
+            <div className="auth-container">
+                { activeTab === "sing in" ?
+                    <>
+                        <h1>Authorization</h1>
+                        <form onSubmit={handleSubmit}>
+                            <input
+                                className='auth-input'
+                                type="email"
+                                placeholder="user e-mail"
+                                required
+                            />
+                            <input
+                                className='auth-input'
+                                type="password"
+                                placeholder="user password"
+                                required
+                            />
+                            <button className='auth-button' type="submit">Sing In</button>
+                            <a onClick={() => setActiveTab("registration")}> Don't have an account? </a>
+                            {error && <p className="error">{error}</p>}
+                        </form>
+                    </>
+                :
+                <>
+                    <h1>Registration</h1>
+                    <form onSubmit={handleSubmit}>
+                        <input
+                            className='auth-input'
+                            type="text"
+                            placeholder="Enter your full name"
+                            required
+                        />
+                        <input
+                            className='auth-input'
+                            type="email"
+                            placeholder="e-mail"
+                            required
+                        />
+                        <input
+                            className='auth-input'
+                            type="text"
+                            placeholder="password"
+                            required
+                        />
+                        <button className='auth-button' type="submit">Sing In</button>
+                        <a onClick={() => setActiveTab("sing in")}> I hava an account </a>
+                        {error && <p className="error">{error}</p>}
+                    </form>
+                </>
+                }
             </div>
         </>
     );
