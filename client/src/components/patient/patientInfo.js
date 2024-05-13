@@ -104,10 +104,11 @@ const PatientInfo = () => {
     return (
         <>
             <div>
-                <h2>Patient Information</h2>
+                <br/>
                 {patient && status === "info" ?
                     <div className="patient-information">
-                        <br></br>
+                        <h2>Patient Information</h2>
+
                         <table>
                             <tbody>
                                 <tr>
@@ -132,6 +133,7 @@ const PatientInfo = () => {
                     </div>
                     :
                     <div className="patient-information">
+                        <h2>Patient Information</h2>
                         <table className="add-doctor-table">
                             <tbody>
                                 <tr>

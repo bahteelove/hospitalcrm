@@ -1,22 +1,26 @@
-
+.container {
+    padding: 10px;
+}
 
 .nav-bar {
     display: flex;
-    justify-content: space-around; /* Distribute buttons evenly */
-    align-items: center; /* Center items vertically */
+    justify-content: space-between; /* Distribute buttons evenly */
     background-color: #f0f0f0;
-    padding: 10px 20px; /* Adjust padding as needed */
-    border-radius: 10px;
+    padding: 10px 0; /* Adjust padding as needed */
+    overflow-x: auto; /* Allow horizontal scrolling if needed */
 }
 
 .nav-bar button {
-    padding: 10px 20px; /* Adjust padding as needed */
-    width: 10%;
+    flex: 1; /* Equal width for each button */
+    padding: 10px 0; /* Adjust padding as needed */
     border: none;
     background-color: transparent;
     cursor: pointer;
     font-size: 16px;
     color: #333;
+    text-align: center;
+    white-space: nowrap; /* Prevent button text from wrapping */
+    border-bottom: 2px solid transparent;
 }
 
 .nav-bar button.active {

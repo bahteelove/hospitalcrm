@@ -3,6 +3,7 @@ import axios from 'axios';
 
 import "../style/adminTables.css"
 
+
 function Doctor() {
   const [doctors, setDoctors] = useState([]);
   const [newDoctorData, setNewDoctorData] = useState({

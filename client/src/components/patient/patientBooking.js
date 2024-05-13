@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useParams } from 'react-router-dom';
 
 import '../style/patientBooking.css';
-import NewBooking from './newBooking';
+
 
 const PatientBooking = () => {
     const [fullName, setFullName] = useState('');

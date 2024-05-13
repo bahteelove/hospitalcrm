@@ -57,22 +57,20 @@ const PatientHistory = () => {
     }
 
     return (
-        <div className="history-container">
+        <div class="history-container">
             <h1>History</h1>
             {historyData && historyData.length > 0 ? (
                 <ul>
                     {historyData.map((visit, index) => (
                         <li key={index}>
-                            <div className="visit-header" onClick={() => toggleVisitDetails(index)}>
-                                <p>Date: {visit.date}</p>
-                            </div>
+                            <div class="visit-header" onClick={() => toggleVisitDetails(index)}> Date: {visit.date} </div>
                             {expandedVisit === index && (
-                                <div className="visit-details">
+                                <div class="visit-details">
                                     <p>Issue: {visit.issue}</p>
                                     <p>Advice: {visit.advice}</p>
                                     <p>Recipe: {visit.recipe}</p>
                                     <p>Doctor: {visit.doctor_name}</p>
-                                    <button onClick={ () => downloadTheRecipe(visit) } > download the recipe </button>
+                                    <button onClick={() => downloadTheRecipe(visit)}>Download</button>
                                 </div>
                             )}
                         </li>
@@ -82,6 +80,7 @@ const PatientHistory = () => {
                 <p>No history available</p>
             )}
         </div>
+
     );
 }
 

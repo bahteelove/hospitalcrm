@@ -18,6 +18,21 @@ const DoctorReport = () => {
         fetchTimeSlotsBySelectedDoctor();
     }, []);
 
+    const getCurrentDateTime = () => {
+        const now = new Date();
+      
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, '0'); // Month starts from 0
+        const day = String(now.getDate()).padStart(2, '0');
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        const seconds = String(now.getSeconds()).padStart(2, '0');
+      
+        const formattedDateTime = `${year}-${month}-${day}, ${hours}:${minutes}:${seconds}`;
+      
+        return formattedDateTime;
+      }
+
     const fetchSelectedDoctor = () => {
         axios.get(`http://localhost:3080/getselecteddoctor/${doctorId}`)
             .then(response => {
@@ -59,7 +74,7 @@ const DoctorReport = () => {
                 doc.text(`Status Time: -`, 10, yPos + 30);
             }
 
-            axios.get(`http://localhost:3080/changestatusnottaken/${slot.id}`)
+            axios.post(`http://localhost:3080/changeslotstatus/${slot.id}`, {patient_id: "", patient_name: "", status: "not taken", status_time: getCurrentDateTime()})
 
     
             if (index !== timeSlots.length - 1) {

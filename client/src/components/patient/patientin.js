@@ -20,17 +20,18 @@ const PatientIn = () => {
     const getQuit = () => { navigate(`/`); }
 
     return (
-        <div className="container">
-            <div className="nav-bar">
-                <button className={activeTab === 'info' ? 'active' : ''} onClick={() => handleTabChange('info')}>Info</button>
-                <button className={activeTab === 'booking' ? 'active' : ''} onClick={() => handleTabChange('booking')}>Booking</button>
-                <button className={activeTab === 'history' ? 'active' : ''} onClick={() => handleTabChange('history')}>History</button>
-                <button onClick={() => getQuit()}>Quit</button>
+        <div class="container">
+            <div class="nav-bar">
+                <button className={ activeTab === 'info' ? 'active' : '' } onClick={() => handleTabChange('info')}>Info</button>
+                <button className={ activeTab === 'booking' ? 'active' : '' } onClick={() => handleTabChange('booking')}>Booking</button>
+                <button className={ activeTab === 'history' ? 'active' : '' } onClick={() => handleTabChange('history')}>History</button>
+                <button className="tab-button" onClick={() => getQuit()}>Quit</button>
             </div>
-            <div className="content">
-                {activeTab === 'info' ? (<PatientInfo />) : (activeTab === 'booking' ? (<PatientBooking />) : (<PatientHistory />))}
+            <div class="content">
+                { activeTab === 'info' ? (<PatientInfo />) : (activeTab === 'booking' ? (<PatientBooking />) : (<PatientHistory />)) }
             </div>
         </div>
+
 
     );
 }
