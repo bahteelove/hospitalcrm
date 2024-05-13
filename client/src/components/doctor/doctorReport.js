@@ -74,7 +74,7 @@ const DoctorReport = () => {
                 doc.text(`Status Time: -`, 10, yPos + 30);
             }
 
-            axios.post(`http://localhost:3080/changeslotstatus/${slot.id}`, {patient_id: "", patient_name: "", status: "not taken", status_time: getCurrentDateTime()})
+            axios.post(`http://localhost:3080/changeslotstatus/${slot.id}`, {patient_id: 0, patient_name: "", status: "not taken", status_time: getCurrentDateTime()})
 
     
             if (index !== timeSlots.length - 1) {
@@ -106,7 +106,7 @@ const DoctorReport = () => {
                     </div>
                 </div>
             )}
-            <button className='down' onClick={ handleDownloadReport }>Close the shift and Download Report </button>
+            <button className='down' onClick={ handleDownloadReport }> End the Shift </button>
         </div>
     );
 };

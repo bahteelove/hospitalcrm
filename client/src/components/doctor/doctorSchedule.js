@@ -55,9 +55,9 @@ const DoctorSchedule = () => {
 
     return (
         <>
-            <div className="container">
-                <h2>Welcome, {selectedDoctor.doctor_name} </h2>
-                <div className="patient-cards">
+            <div class="container">
+                <h2>Welcome, {selectedDoctor.doctor_name}</h2>
+                <div class="patient-cards">
                     {timeSlots && timeSlots.map((slot, index) => (
                         <button
                             className="patient-card"
@@ -68,7 +68,7 @@ const DoctorSchedule = () => {
                             }}
                         >
                             <div className="patient-info">
-                                <h3>{ slot.patient_name ? slot.patient_name : 'Not taken' }</h3>
+                                <h3>{slot.patient_name ? slot.patient_name : 'Not taken'}</h3>
                                 <p>Time: {slot.time}</p>
                             </div>
                         </button>
@@ -77,20 +77,21 @@ const DoctorSchedule = () => {
             </div>
 
             {selectedPatient ? (
-                <div className="tab-container">
-                    <div className="tab">
+                <div class="tab-container">
+                    <div class="tab">
                         <button className={activeTab === 'report' ? 'active' : ''} onClick={() => handleTabChange('report')}>Report</button>
                         <button className={activeTab === 'history' ? 'active' : ''} onClick={() => handleTabChange('history')}>History</button>
                     </div>
-                    <div className="content">
-                        { activeTab === 'report' ? 
-                        ( <DoctorPatientReport patientId={selectedPatient} slotId={selectedSlot} /> ) : 
-                        ( <DoctorHistory patientId={selectedPatient} /> ) }
+                    <div class="content">
+                        { activeTab === 'report' ?
+                            (<DoctorPatientReport patientId={selectedPatient} slotId={selectedSlot} />) :
+                            (<DoctorHistory patientId={selectedPatient} />)
+                        }
                     </div>
                 </div>
-            ) : ( <h2> This time slot has not booked </h2> )}
-            
+            ) : (<h2>This time slot has not been booked</h2>)}
         </>
+
     );
 }
 

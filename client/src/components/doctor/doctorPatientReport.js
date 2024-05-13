@@ -123,21 +123,18 @@ const DoctorPatientReport = (props) => {
             <div className="data-inputs">
                 <label> Patient name: { selectedPatient.patient_name } </label><br/>
                 <div>
-                    <label> Issue: </label>
                     <input
                         type="text"
                         value={issue}
                         onChange={(e) => setIssue(e.target.value)}
                         placeholder="Issue"
                     />
-                    <label> Advice: </label>
                     <input
                         type="text"
                         value={advice}
                         onChange={(e) => setAdvice(e.target.value)}
                         placeholder="Advice"
                     />
-                    <label> Recipe: </label>
                     <input
                         type="text"
                         value={recipe}
