@@ -1,4 +1,6 @@
-const mysql = require("mysql")
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const mysql = require('mysql');
 
 // Create a database connection
 const db = mysql.createConnection({
@@ -47,6 +49,21 @@ const createDoctorsTable = (req, res) => {
         res.send(result);
     });
   };
+
+  // Alter Doctor Table to add a column
+  // GET /alterDoctorTable
+  const alterDoctorTable = (req, res) => {
+    let sql = 'ALTER TABLE doctors ADD COLUMN password VARCHAR(255)';
+    db.query(sql, (err, result) => {
+        if (err) {
+            console.error("Error altering <doctors> table:", err.code, "-", err.message);
+            res.status(500).send('<doctors> table alteration has failed');
+            return;
+        }
+        console.log("<doctors> table has been altered");
+        res.send("<doctors> table has been altered");
+    });
+  };
   
   // to get a selected doctor
   // GET /getselecteddoctor/:doctor_id
@@ -84,22 +101,43 @@ const createDoctorsTable = (req, res) => {
   };
   
   // endpoint
-  // POST /submitform
+  // POST /addnewdoctor
   const addNewDoctor = (req, res) => {
-    const { doctor_name, specialization, avatar } = req.body;
-  
-    // Insert form data into MySQL database
-    const sql = 'INSERT INTO doctors (doctor_name, specialization, avatar) VALUES (?, ?, ?)';
-    db.query(sql, [doctor_name, specialization, avatar], (err, result) => {
+    const { doctor_name, specialization, avatar, email, password } = req.body;
+
+    const hashedPassword = bcrypt.hashSync(password, 10);
+    const user = { doctor_name, specialization, avatar, email, password: hashedPassword };
+
+    db.query('INSERT INTO doctors SET ?', user, (err, result) => {
       if (err) {
-        console.error('Error inserting data into MySQL:', err);
-        res.status(500).send('Failed to submit form');
+        console.error('Error registering user:', err);
+        res.status(500).send('Error registering user');
         return;
       }
-      console.log('Form data inserted into MySQL');
-      res.send('Form submitted successfully');
+      console.log('User registered successfully');
+      res.send('User registered successfully');
     });
   
+  };
+
+  // change doctor info
+  // POST /changeDoctorInfo/:doctor_id
+  const changeDoctorInfo = (req, res) => {
+    const { doctor_id } = req.params;
+    const { doctor_name, specialization, avatar, email, password } = req.body;
+    
+    const hashedPassword = bcrypt.hashSync(password, 10);
+  
+    const sql = 'UPDATE doctors SET doctor_name = ?, specialization = ?, avatar = ?, email = ?, password = ? WHERE doctor_id = ?';
+    db.query(sql, [doctor_name, specialization, avatar, email, hashedPassword, doctor_id], (err, result) => {
+      if (err) {
+        console.error(`Error changing the doctor (${doctor_name}) with ID ${doctor_id}:`, err);
+        res.status(500).send(`Error changing the doctor (${doctor_name}) with ID ${doctor_id}`);
+        return;
+      }
+      console.log(`new doctor (${doctor_name}) with ID ${doctor_id} added successfully`);
+      res.send(`new doctor (${doctor_name}) with ID ${doctor_id} added successfully`);
+    });
   };
   
   // to delete a doctor
@@ -141,5 +179,8 @@ module.exports = {
   addNewDoctor,
   deleteDoctor,
   deleteNullDoctors,
-  getSelectedDoctor
+  getSelectedDoctor,
+
+  alterDoctorTable,
+  changeDoctorInfo
  }

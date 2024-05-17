@@ -1,104 +1,55 @@
 import React, { useState } from 'react';
+import axios from 'axios';
+
 import { useNavigate } from 'react-router-dom';
 
-import './style/authorization.css';
-
-const Authorization = () => {
+function Login() {
     const navigate = useNavigate();
 
-    const [userId, setUsertId] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
 
-    const [activeTab, setActiveTab] = useState('sing in')
-
-    const [userEmail, setUserEmail] = useState('')
-    const [userPassword, setUserPassword] = useState('')
-
-    const [error, setError] = useState('');
-
-    const handleInputChange = (event) => {
-        setUsertId(event.target.value);
+  const handleLogin = async () => {
+    try {
+      const response = await axios.post('http://localhost:3080/login', {
+        email,
+        password
+      });
+      localStorage.setItem('token', response.data.token);
+      localStorage.setItem('userType', response.data.userType); // Save user type
+      console.log('User logged in successfully');
+      
+      // Redirect to the doctor dashboard
+      if (response.data.userType === 'doctor') {
+        navigate(`/admin`);
+        //window.location.href = '/admin'; // Redirect to doctor dashboard
+      }
+    } catch (error) {
+      if (error.response) {
+        // The request was made and the server responded with a status code that falls out of the range of 2xx
+        console.error('Server responded with an error:', error.response.data);
+        setError(error.response.data); // Display server error message
+      } else if (error.request) {
+        // The request was made but no response was received
+        console.error('No response received:', error.request);
+        setError('No response from server. Please try again later.');
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        console.error('Error in setting up request:', error.message);
+        setError('Error in setting up request. Please try again.');
+      }
     }
+  };
 
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        const data = localStorage.getItem('data');
-        if (data) {
-            const parsedData = JSON.parse(data);
-            const patients = parsedData.patients;
-            const doctors = parsedData.doctors;
-
-            const patientExists = patients.some(patient => patient.patient_id.toString() === userId);
-            const doctorExists = doctors.some(doctor => doctor.doctor_id.toString() === userId);
-
-            if (patientExists) {
-                navigate(`/patientin/${userId}`);
-            } else if (doctorExists) {
-                navigate(`/doctorin/${userId}`);
-            } else if (userId === "333") {
-                navigate(`/admin`);
-            } else {
-                setError('User is not found. Please enter a valid ID.');
-            }
-        } else {
-            setError('Data not found. Please contact your administrator.');
-        }
-    };
-
-    return (
-        <>
-            <div className="auth-container">
-                { activeTab === "sing in" ?
-                    <>
-                        <h1>Authorization</h1>
-                        <form onSubmit={handleSubmit}>
-                            <input
-                                className='auth-input'
-                                type="email"
-                                placeholder="user e-mail"
-                                required
-                            />
-                            <input
-                                className='auth-input'
-                                type="password"
-                                placeholder="user password"
-                                required
-                            />
-                            <button className='auth-button' type="submit">Sing In</button>
-                            <a onClick={() => setActiveTab("registration")}> Don't have an account? </a>
-                            {error && <p className="error">{error}</p>}
-                        </form>
-                    </>
-                :
-                <>
-                    <h1>Registration</h1>
-                    <form onSubmit={handleSubmit}>
-                        <input
-                            className='auth-input'
-                            type="text"
-                            placeholder="Enter your full name"
-                            required
-                        />
-                        <input
-                            className='auth-input'
-                            type="email"
-                            placeholder="e-mail"
-                            required
-                        />
-                        <input
-                            className='auth-input'
-                            type="text"
-                            placeholder="password"
-                            required
-                        />
-                        <button className='auth-button' type="submit">Sing In</button>
-                        <a onClick={() => setActiveTab("sing in")}> I hava an account </a>
-                        {error && <p className="error">{error}</p>}
-                    </form>
-                </>
-                }
-            </div>
-        </>
-    );
+  return (
+    <div>
+      <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
+      <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
+      <button onClick={handleLogin}>Login</button>
+      {error && <p style={{ color: 'red' }}>{error}</p>} {/* Display error message */}
+    </div>
+  );
 }
 
-export default Authorization;
+export default Login;

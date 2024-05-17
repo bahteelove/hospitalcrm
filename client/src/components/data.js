@@ -1,82 +1,104 @@
-import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import jsPDF from 'jspdf';
+import './style/authorization.css';
 
-import '../style/doctorReport.css'; // Import CSS file for styling 
+const Authorization = () => {
+    const navigate = useNavigate();
 
-const DoctorReport = () => {
-    const { doctorId } = useParams();
+    const [userId, setUsertId] = useState('');
 
-    const [selectedPatient, setSelectedPatient] = useState('');
-    const [selectedTime, setSelectedTime] = useState('');
+    const [activeTab, setActiveTab] = useState('sing in')
 
-    const dataName = "test";
-    const data = localStorage.getItem(`${dataName}`);
-    const parsedData = JSON.parse(data);
+    const [userEmail, setUserEmail] = useState('')
+    const [userPassword, setUserPassword] = useState('')
 
-    const doctorsData = parsedData.doctors;
-    const patientsData = parsedData.patients;
+    const [error, setError] = useState('');
 
-    
+    const handleInputChange = (event) => {
+        setUsertId(event.target.value);
+    }
 
-    const handleSelectPatient = (patientId, time) => {
-        setSelectedPatient(patientId);
-        setSelectedTime(time);
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        const data = localStorage.getItem('data');
+        if (data) {
+            const parsedData = JSON.parse(data);
+            const patients = parsedData.patients;
+            const doctors = parsedData.doctors;
+
+            const patientExists = patients.some(patient => patient.patient_id.toString() === userId);
+            const doctorExists = doctors.some(doctor => doctor.doctor_id.toString() === userId);
+
+            if (patientExists) {
+                navigate(`/patientin/${userId}`);
+            } else if (doctorExists) {
+                navigate(`/doctorin/${userId}`);
+            } else if (userId === "333") {
+                navigate(`/admin`);
+            } else {
+                setError('User is not found. Please enter a valid ID.');
+            }
+        } else {
+            setError('Data not found. Please contact your administrator.');
+        }
     };
-
-    const [expandedVisit, setExpandedVisit] = useState(null);
-    const toggleVisitDetails = (index) => {
-        setExpandedVisit(index === expandedVisit ? null : index);
-    };
-
-    const doctor = doctorsData.find(doctor => doctor.doctor_id === parseInt(doctorId));
-    const patient = patientsData.find(patient => patient.patient_id === parseInt(selectedPatient));
 
     return (
         <>
-            <h1> Daily Report </h1>
-            <div className="patient-cards-r">
-                {doctor && doctor.timeSlots.map((slot, index) => (
-                    <button
-                        className="patient-card-r"
-                        key={index}
-                        onClick={() => handleSelectPatient(parseInt(slot.patient_id), slot.time)}
-                    >
-                        <div className="patient-info-r">
-                            <h3>{patientsData.find(patient => patient.patient_id === parseInt(slot.patient_id))?.patient_name}</h3>
-                            <p>Time: {slot.time}</p>
-                        </div>
-                    </button>
-                ))}
+            <div className="auth-container">
+                { activeTab === "sing in" ?
+                    <>
+                        <h1>Authorization</h1>
+                        <form onSubmit={handleSubmit}>
+                            <input
+                                className='auth-input'
+                                type="email"
+                                placeholder="user e-mail"
+                                required
+                            />
+                            <input
+                                className='auth-input'
+                                type="password"
+                                placeholder="user password"
+                                required
+                            />
+                            <button className='auth-button' type="submit">Sing In</button>
+                            <a onClick={() => setActiveTab("registration")}> Don't have an account? </a>
+                            {error && <p className="error">{error}</p>}
+                        </form>
+                    </>
+                :
+                <>
+                    <h1>Registration</h1>
+                    <form onSubmit={handleSubmit}>
+                        <input
+                            className='auth-input'
+                            type="text"
+                            placeholder="Enter your full name"
+                            required
+                        />
+                        <input
+                            className='auth-input'
+                            type="email"
+                            placeholder="Enter your e-mail"
+                            required
+                        />
+                        <input
+                            className='auth-input'
+                            type="text"
+                            placeholder="Enter your password"
+                            required
+                        />
+                        <button className='auth-button' type="submit">Sing In</button>
+                        <a onClick={() => setActiveTab("sing in")}> I hava an account </a>
+                        {error && <p className="error">{error}</p>}
+                    </form>
+                </>
+                }
             </div>
-            {selectedPatient ? (
-                patient && patient.history && patient.history.length > 0 ? (
-                    <ul>
-                        {patient.history.map((visit, index) => (
-                            <li key={index}>
-                                <div className="visit-header" onClick={() => toggleVisitDetails(index)}>
-                                    <p>Date: {visit.date}</p>
-                                </div>
-                                {expandedVisit === index && (
-                                    <div className="visit-details">
-                                        <p>Issue: {visit.issue}</p>
-                                        <p>Advice: {visit.advice}</p>
-                                        <p>Recipe: {visit.recipe}</p>
-                                        <p>Doctor: {visit.doctor}</p>
-                                        <button > download the recipe </button>
-                                    </div>
-                                )}
-                            </li>
-                        ))}
-                    </ul>
-                ) : (
-                    <p>No history available</p>
-                )
-            ) : null}
         </>
     );
-};
+}
 
-export default DoctorReport;
+export default Authorization;

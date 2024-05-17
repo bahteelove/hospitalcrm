@@ -5,11 +5,32 @@ import "../style/adminTables.css"
 
 
 function Doctor() {
+  const [activeTab, setActiveTab] = useState('new')
+
   const [doctors, setDoctors] = useState([]);
   const [newDoctorData, setNewDoctorData] = useState({
     doctor_name: '',
     specialization: '',
-    avatar: ''
+    avatar: '',
+    email: '',
+    password: ''
+  });
+
+  const [lastDoctorData, setLastDoctorData] = useState({
+    doctor_id: '',
+    doctor_name: '',
+    specialization: '',
+    avatar: '',
+    email: '',
+    password: ''
+  });
+
+  const [changeDoctorData, setChnageDoctorData] = useState({
+    doctor_name: '',
+    specialization: '',
+    avatar: '',
+    email: '',
+    password: ''
   });
 
   const [timeSlots, setTimeSlots] = useState([]);
@@ -51,6 +72,11 @@ function Doctor() {
 
   const handleInputChangeDoctor = (event) => {
     const { name, value } = event.target;
+    setChnageDoctorData({ ...changeDoctorData, [name]: value });
+  };
+
+  const handleInputNewDoctor = (event) => {
+    const { name, value } = event.target;
     setNewDoctorData({ ...newDoctorData, [name]: value });
   };
 
@@ -71,7 +97,7 @@ function Doctor() {
       }
   
       // Send POST request to add a new doctor
-      await axios.post('http://localhost:3080/submitform', newDoctorData);
+      await axios.post('http://localhost:3080/addnewdoctor', newDoctorData);
   
       // Fetch updated list of doctors after adding new doctor
       fetchDoctors();
@@ -80,7 +106,9 @@ function Doctor() {
       setNewDoctorData({
         doctor_name: '',
         specialization: '',
-        avatar: ''
+        avatar: '',
+        email: '',
+        password: ''
       });
   
       console.log('New doctor added successfully');
@@ -103,6 +131,31 @@ function Doctor() {
     }
   };
 
+  const changeButton = (doctor_id, doctor_name, specialization, avatar, email, password) => {
+    lastDoctorData.doctor_id = doctor_id;
+    lastDoctorData.doctor_name = doctor_name;
+    lastDoctorData.specialization = specialization;
+    lastDoctorData.avatar = avatar;
+    lastDoctorData.email = email;
+    lastDoctorData.password = password;
+
+    alert(lastDoctorData.doctor_name);
+
+    setActiveTab("")
+  }
+
+  const handleChange = async(doctor_id, e) => {
+    e.preventDefault(); // Prevent default form submission
+    try {
+      await axios.post(`http://localhost:3080/changeDoctorInfo/${doctor_id}`, changeDoctorData);
+      fetchDoctors(); // Refresh data
+      setActiveTab('new')
+      console.log(`Doctor with ID ${doctor_id} has been changed`);
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  }
+
   return (
     <div className="doctor-container">
       <h1>Doctors</h1>
@@ -113,6 +166,9 @@ function Doctor() {
             <th className="table-heading">Name</th>
             <th className="table-heading">Specialization</th>
             <th className="table-heading">Avatar</th>
+            <th className="table-heading">E-mail</th>
+            <th className="table-heading">Password</th>
+            <th className="table-heading">Action</th> {/* New column for delete button */}
             <th className="table-heading">Action</th> {/* New column for delete button */}
           </tr>
         </thead>
@@ -123,34 +179,81 @@ function Doctor() {
               <td className="table-data">{doctor.doctor_name}</td>
               <td className="table-data">{doctor.specialization}</td>
               <td className="table-data">{doctor.avatar}</td>
+              <td className="table-data">{doctor.email}</td>
+              <td className="table-data">{doctor.password}</td>
               <td className="table-data">
                 <button className="delete-btn" onClick={() => deleteDoctor(doctor.doctor_id, doctor.doctor_name)}>Delete</button>
+              </td>
+              <td className="table-data">
+                <button className="delete-btn" onClick={() => changeButton(doctor.doctor_id, doctor.doctor_name, doctor.specialization, doctor.avatar, doctor.email, doctor.password)}>change</button>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
 
-      <h2>Add New Doctor</h2>
-      <form className="add-doctor-form" onSubmit={addNewDoctor}>
-        <table className="add-doctor-table">
-          <tbody>
-            <tr>
-              <td className="form-label">Name:</td>
-              <td><input className="form-input" type="text" name="doctor_name" value={newDoctorData.doctor_name} onChange={handleInputChangeDoctor} /></td>
-            </tr>
-            <tr>
-              <td className="form-label">Specialization:</td>
-              <td><input className="form-input" type="text" name="specialization" value={newDoctorData.specialization} onChange={handleInputChangeDoctor} /></td>
-            </tr>
-            <tr>
-              <td className="form-label">Avatar:</td>
-              <td><input className="form-input" type="text" name="avatar" value={newDoctorData.avatar} onChange={handleInputChangeDoctor} /></td>
-            </tr>
-          </tbody>
-        </table>
-        <button className="submit-btn" type="submit">Add Doctor</button>
-      </form>
+      {activeTab === "new" ?
+      <>
+        <h2>Add New Doctor</h2>
+        <form className="add-doctor-form" onSubmit={addNewDoctor}>
+          <table className="add-doctor-table">
+            <tbody>
+              <tr>
+                <td className="form-label">Name:</td>
+                <td><input className="form-input" type="text" name="doctor_name" value={newDoctorData.doctor_name} onChange={handleInputNewDoctor} /></td>
+              </tr>
+              <tr>
+                <td className="form-label">Specialization:</td>
+                <td><input className="form-input" type="text" name="specialization" value={newDoctorData.specialization} onChange={handleInputNewDoctor} /></td>
+              </tr>
+              <tr>
+                <td className="form-label">Avatar:</td>
+                <td><input className="form-input" type="text" name="avatar" value={newDoctorData.avatar} onChange={handleInputNewDoctor} /></td>
+              </tr>
+              <tr>
+                <td className="form-label">Avatar:</td>
+                <td><input className="form-input" type="email" name="email" value={newDoctorData.email} onChange={handleInputNewDoctor} /></td>
+              </tr>
+              <tr>
+                <td className="form-label">Avatar:</td>
+                <td><input className="form-input" type="text" name="password" value={newDoctorData.password} onChange={handleInputNewDoctor} /></td>
+              </tr>
+            </tbody>
+          </table>
+          <button className="submit-btn" type="submit">Add Doctor</button>
+        </form>  
+      </> :
+      <>
+        <h2>Change Doctor's Info</h2>
+        <form className="add-doctor-form" onSubmit={(e) => handleChange(lastDoctorData.doctor_id, e)}>
+          <table className="add-doctor-table">
+            <tbody>
+              <tr>
+                <td className="form-label">Name:</td>
+                <td><input className="form-input" type="text" name="doctor_name" value={changeDoctorData.doctor_name} onChange={handleInputChangeDoctor} /></td>
+              </tr>
+              <tr>
+                <td className="form-label">Specialization:</td>
+                <td><input className="form-input" type="text" name="specialization" value={changeDoctorData.specialization} onChange={handleInputChangeDoctor} /></td>
+              </tr>
+              <tr>
+                <td className="form-label">Avatar:</td>
+                <td><input className="form-input" type="text" name="avatar" value={changeDoctorData.avatar} onChange={handleInputChangeDoctor} /></td>
+              </tr>
+              <tr>
+                <td className="form-label">Avatar:</td>
+                <td><input className="form-input" type="email" name="email" value={changeDoctorData.email} onChange={handleInputChangeDoctor} /></td>
+              </tr>
+              <tr>
+                <td className="form-label">Avatar:</td>
+                <td><input className="form-input" type="text" name="password" value={changeDoctorData.password} onChange={handleInputChangeDoctor} /></td>
+              </tr>
+            </tbody>
+          </table>
+          <button className="submit-btn" type="submit">Changer</button>
+        </form>
+      </>
+      }
 
     </div>
   );

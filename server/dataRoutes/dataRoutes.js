@@ -9,7 +9,9 @@ const {
     addNewDoctor,
     deleteDoctor,
     deleteNullDoctors,
-    getSelectedDoctor
+    getSelectedDoctor,
+    alterDoctorTable,
+    changeDoctorInfo
 } = require("../controllers/doctorController") 
 const {
     createTimeSlotsTable,
@@ -53,9 +55,16 @@ const {
     alterPatientHistoryTable
 } = require("../controllers/patientHistoryController") 
 
+const { login } = require("../controllers/userController")
+
 // ---------------------------------------------------------------------
 
 router.route('/createdatabase').get(createDB)
+
+// ---------------------------------------------------------------------
+
+// POST /login
+router.route('/login').post(login)
 
 // ---------------------------------------------------------------------
 
@@ -67,6 +76,14 @@ router.route('/createdoctorstable').get(createDoctorsTable)
 // GET /getdoctorstable
 router.route('/getdoctorstable').get(getDoctorsData);
 
+// Alter Doctor Table to add a column
+// GET /alterDoctorTable
+router.route('/alterDoctorTable').get(alterDoctorTable);
+
+// POST /changeDoctorInfo/:doctor_id
+router.route('/changeDoctorInfo/:doctor_id').post(changeDoctorInfo);
+
+
 // to get a selected doctor
 // GET /getselecteddoctor/:doctor_id
 router.route('/getselecteddoctor/:doctor_id').get(getSelectedDoctor);
@@ -76,8 +93,8 @@ router.route('/getselecteddoctor/:doctor_id').get(getSelectedDoctor);
 router.route('/addemptydoctor').post(addEmptyDoctor)
 
 // endpoint
-// POST /submitform
-router.route('/submitform').post(addNewDoctor)
+// POST /addnewdoctor
+router.route('/addnewdoctor').post(addNewDoctor)
 
 // to delete a doctor
 // DELETE /deletedoctor/:doctor_name

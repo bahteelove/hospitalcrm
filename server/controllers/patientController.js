@@ -1,4 +1,7 @@
-const mysql = require("mysql")
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const mysql = require('mysql');
+
 
 // Create a database connection
 const db = mysql.createConnection({
@@ -37,7 +40,7 @@ const createPatientsTable = (req, res) => {
 // Alter Patient Table to add a column
 // GET /alterpatienttable
 const alterPatientTable = (req, res) => {
-  let sql = 'ALTER TABLE patients ADD COLUMN email VARCHAR(255)';
+  let sql = 'ALTER TABLE patients ADD COLUMN password VARCHAR(255)';
   db.query(sql, (err, result) => {
       if (err) {
           console.error("Error altering <patient> table:", err.code, "-", err.message);
@@ -104,17 +107,19 @@ const deletePatientColumn = (req, res) => {
   // Add New Patient
   // POST /addnewpatient
   const addNewPatient = (req, res) => {
-    const { patient_name, phone_number, avatar, birthday, email } = req.body;
+    const { patient_name, phone_number, avatar, birthday, email, password } = req.body;
   
-    const sql = 'INSERT INTO patients (patient_name, phone_number, avatar, birthday, email) VALUES (?, ?, ?, ?, ?)';
-    db.query(sql, [patient_name, phone_number, avatar, birthday, email], (err, result) => {
+    const hashedPassword = bcrypt.hashSync(password, 10);
+    const user = { patient_name, phone_number, avatar, birthday, email, password: hashedPassword };
+
+    db.query('INSERT INTO patients SET ?', user, (err, result) => {
       if (err) {
-        console.error(`Error adding new patient (${patient_name}):`, err);
-        res.status(500).send(`Error adding new patient (${patient_name})`);
+        console.error(`Error registering patient (${patient_name}):`, err);
+        res.status(500).send(`Error registering patient (${patient_name})`);
         return;
       }
-      console.log(`new patient (${patient_name}) added successfully`);
-      res.send(`new patient (${patient_name}) added successfully`);
+      console.log(`new patient (${patient_name}) registered successfully`);
+      res.send(`new patient (${patient_name}) registered successfully`);
     });
   };
 
@@ -122,10 +127,10 @@ const deletePatientColumn = (req, res) => {
   // POST /changepatientinfo/:patient_id
   const changePatientInfo = (req, res) => {
     const { patient_id } = req.params;
-    const { patient_name, phone_number, avatar, birthday, email } = req.body;
+    const { patient_name, phone_number, avatar, birthday, email, password } = req.body;
   
-    const sql = 'UPDATE patients SET patient_name = ?, phone_number = ?, avatar = ?, birthday = ?, email = ? WHERE patient_id = ?';
-    db.query(sql, [patient_name, phone_number, avatar, birthday, email, patient_id], (err, result) => {
+    const sql = 'UPDATE patients SET patient_name = ?, phone_number = ?, avatar = ?, birthday = ?, email = ?, password = ? WHERE patient_id = ?';
+    db.query(sql, [patient_name, phone_number, avatar, birthday, email, password], (err, result) => {
       if (err) {
         console.error(`Error changing the patient (${patient_name}) with ID ${patient_id}:`, err);
         res.status(500).send(`Error changing the patient (${patient_name}) with ID ${patient_id}`);
