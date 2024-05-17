@@ -86,7 +86,8 @@ router.route('/changeDoctorInfo/:doctor_id').post(changeDoctorInfo);
 
 // to get a selected doctor
 // GET /getselecteddoctor/:doctor_id
-router.route('/getselecteddoctor/:doctor_id').get(getSelectedDoctor);
+//router.route('/getselecteddoctor/:doctor_id').get(getSelectedDoctor);
+router.route('/getselecteddoctor/:token').get(getSelectedDoctor);
 
 // to add an empty doctor
 // POST /addemptydoctor
@@ -122,8 +123,8 @@ router.route('/gettimeslotstable').get(getTimeSlotsData);
 router.route('/gettimeslotbyid/:id').get(getTimeSlotsByID);
 
 // to get timeSlots for a selected doctor
-// GET /gettimeslotsforselecteddoctor/:doctor_id
-router.route('/gettimeslotsforselecteddoctor/:doctor_id').get(getTimeSlotsForSelectedDoctor);
+// GET /gettimeslotsforselecteddoctor/:token
+router.route('/gettimeslotsforselecteddoctor/:token').get(getTimeSlotsForSelectedDoctor);
 
 // to chnage the status
 // POST /changestatustaken/:id

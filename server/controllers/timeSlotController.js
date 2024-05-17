@@ -1,4 +1,6 @@
 const mysql = require("mysql")
+const jwt = require('jsonwebtoken');
+
 
 // Create a database connection
 const db = mysql.createConnection({
@@ -76,23 +78,32 @@ const DropTimeSlotsTable = (req, res) => {
   };
   
   // to get timeSlots for a selected doctor
-  // GET /gettimeslotsforselecteddoctor/:doctor_id
+  // GET /gettimeslotsforselecteddoctor/:token
   const getTimeSlotsForSelectedDoctor = (req, res) => {
-    const { doctor_id } = req.params;
-  
-    const sql = 'SELECT * FROM time_slots WHERE doctor_id = ?';
-    db.query(sql, [doctor_id], (err, result) => {
+    const { token } = req.params;
+
+    jwt.verify(token, 'secret', (err, decoded) => {
       if (err) {
-        console.error(`Error fetching time slots for doctor (${doctor_id}):`, err.code, "-", err.message);
-        res.status(500).send(`Failed to fetch time slots for doctor (${doctor_id})`);
-        return;
+        return res.status(500).send('Failed to authenticate token');
       }
-      if (result.length === 0) {
-        console.log(`No time slots found for doctor with ID ${doctor_id}`);
-        res.status(404).send(`No time slots found for doctor with ID ${doctor_id}`);
-        return;
-      }
-      res.status(200).json(result);
+  
+      const doctor_id = decoded.userId; // Extract doctor_id from decoded token
+  
+  
+      const sql = 'SELECT * FROM time_slots WHERE doctor_id = ?';
+      db.query(sql, [doctor_id], (err, result) => {
+        if (err) {
+          console.error(`Error fetching time slots for doctor (${doctor_id}):`, err.code, "-", err.message);
+          res.status(500).send(`Failed to fetch time slots for doctor (${doctor_id})`);
+          return;
+        }
+        if (result.length === 0) {
+          console.log(`No time slots found for doctor with ID ${doctor_id}`);
+          res.status(404).send(`No time slots found for doctor with ID ${doctor_id}`);
+          return;
+        }
+        res.status(200).json(result);
+      });
     });
   };
 

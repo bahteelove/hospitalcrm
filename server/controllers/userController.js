@@ -30,7 +30,7 @@ const login = (req, res) => {
         if (results.length > 0) {
           const user = results[0];
           if (bcrypt.compareSync(password, user.password)) {
-            const token = jwt.sign({ userId: user.id, userType: 'doctor' }, 'secret', { expiresIn: '1h' });
+            const token = jwt.sign({ userId: user.doctor_id, userType: 'doctor' }, 'secret', { expiresIn: '1h' });
             res.status(200).send({ token, userType: "doctor" });
           } else {
             res.status(401).send('Invalid email or password');
@@ -41,9 +41,7 @@ const login = (req, res) => {
       }
     });
   };
-  
-  
 
 module.exports = {
-  login
+  login,
 };

@@ -20,16 +20,7 @@ const Authorization = () => {
     }
 
     const handleSubmit = (event) => {
-        event.preventDefault();
-        const data = localStorage.getItem('data');
-        if (data) {
-            const parsedData = JSON.parse(data);
-            const patients = parsedData.patients;
-            const doctors = parsedData.doctors;
-
-            const patientExists = patients.some(patient => patient.patient_id.toString() === userId);
-            const doctorExists = doctors.some(doctor => doctor.doctor_id.toString() === userId);
-
+        
             if (patientExists) {
                 navigate(`/patientin/${userId}`);
             } else if (doctorExists) {

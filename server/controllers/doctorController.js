@@ -65,6 +65,7 @@ const createDoctorsTable = (req, res) => {
     });
   };
   
+  /*
   // to get a selected doctor
   // GET /getselecteddoctor/:doctor_id
   const getSelectedDoctor = (req, res) => {
@@ -86,7 +87,39 @@ const createDoctorsTable = (req, res) => {
       res.status(200).json(result[0]); // Return only the first row (assuming doctor_id is unique)
     });
   };
+  */
+  // GET /getselecteddoctor/:token
+  const getSelectedDoctor = (req, res) => {
+    const { token } = req.params;
   
+    // Verify the token and extract the doctor_id
+    jwt.verify(token, 'secret', (err, decoded) => {
+      if (err) {
+        return res.status(500).send('Failed to authenticate token');
+      }
+  
+      const doctor_id = decoded.userId; // Extract doctor_id from decoded token
+  
+      // Fetch the selected doctor's information from the database using the doctor_id
+      db.query('SELECT * FROM doctors WHERE doctor_id = ?', [doctor_id], (err, result) => {
+        if (err) {
+          console.error(`Error fetching doctor (${doctor_id}) info:`, err.code, "-", err.message);
+          res.status(500).send(`Failed to fetch doctor (${doctor_id}) info`);
+          return;
+        }
+        if (result.length === 0) {
+          console.log(`Doctor with ID ${doctor_id} not found`);
+          res.status(404).send(`Doctor with ID ${doctor_id} not found`);
+          return;
+        }
+        console.log(`Doctor (${doctor_id}) info:`, result[0]);
+        res.status(200).json(result[0]);
+      });
+    });
+  };
+  
+  
+    
   
   // to add an empty doctor
   // POST /addemptydoctor
