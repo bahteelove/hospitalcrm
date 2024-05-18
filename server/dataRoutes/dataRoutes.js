@@ -98,8 +98,8 @@ router.route('/addemptydoctor').post(addEmptyDoctor)
 router.route('/addnewdoctor').post(addNewDoctor)
 
 // to delete a doctor
-// DELETE /deletedoctor/:doctor_name
-router.route('/deletedoctor/:doctor_name').delete(deleteDoctor);
+// GET /deletedoctor/:id
+router.route('/deletedoctor/:id').get(deleteDoctor);
 
 // to delete empty doctors
 // DELETE /deleteemptydoctors
@@ -143,8 +143,8 @@ router.route('/changeslotstatus/:id').post(changeStatus);
 router.route('/changestatusnottaken/:id').get(changeStatusNotTaken);
 
 // to get timeSlots for a selected patient
-// GET /getTimeSlotsForSelectedPatient/:patient_id
-router.route('/getTimeSlotsForSelectedPatient/:patient_id').get(getTimeSlotsForSelectedPatient);
+// GET /getTimeSlotsForSelectedPatient/:token
+router.route('/getTimeSlotsForSelectedPatient/:token').get(getTimeSlotsForSelectedPatient);
 
 // Add Time Slot
 // POST /addnewtimeslot
@@ -181,8 +181,8 @@ router.route('/deletepatientcolum').get(deletePatientColumn);
 router.route('/getpatientstable').get(getPatientsData);
 
 // get selected patient
-// GET /getselectedpatient/:patient_id
-router.route('/getselectedpatient/:patient_id').get(getSelectedPatient);
+// GET /getselectedpatient/:token
+router.route('/getselectedpatient/:token').get(getSelectedPatient);
 
 // Add New Patient
 // POST /addnewpatient

@@ -87,19 +87,19 @@ const DropTimeSlotsTable = (req, res) => {
         return res.status(500).send('Failed to authenticate token');
       }
   
-      const doctor_id = decoded.userId; // Extract doctor_id from decoded token
+      const id = decoded.userId; // Extract doctor_id from decoded token
   
   
       const sql = 'SELECT * FROM time_slots WHERE doctor_id = ?';
-      db.query(sql, [doctor_id], (err, result) => {
+      db.query(sql, [id], (err, result) => {
         if (err) {
-          console.error(`Error fetching time slots for doctor (${doctor_id}):`, err.code, "-", err.message);
-          res.status(500).send(`Failed to fetch time slots for doctor (${doctor_id})`);
+          console.error(`Error fetching time slots for doctor (${id}):`, err.code, "-", err.message);
+          res.status(500).send(`Failed to fetch time slots for doctor (${id})`);
           return;
         }
         if (result.length === 0) {
-          console.log(`No time slots found for doctor with ID ${doctor_id}`);
-          res.status(404).send(`No time slots found for doctor with ID ${doctor_id}`);
+          console.log(`No time slots found for doctor with ID ${id}`);
+          res.status(404).send(`No time slots found for doctor with ID ${id}`);
           return;
         }
         res.status(200).json(result);
@@ -108,24 +108,32 @@ const DropTimeSlotsTable = (req, res) => {
   };
 
   // to get timeSlots for a selected patient
-  // GET /getTimeSlotsForSelectedPatient/:patient_id
+  // GET /getTimeSlotsForSelectedPatient/:token
   const getTimeSlotsForSelectedPatient = (req, res) => {
-    const { patient_id } = req.params;
-  
-    const sql = 'SELECT * FROM time_slots WHERE patient_id = ?';
-    db.query(sql, [patient_id], (err, result) => {
+    const { token } = req.params;
+
+    jwt.verify(token, 'secret', (err, decoded) => {
       if (err) {
-        console.error(`Error fetching time slots for patient (${patient_id}):`, err.code, "-", err.message);
-        res.status(500).send(`Failed to fetch time slots for patient (${patient_id})`);
-        return;
+        return res.status(500).send('Failed to authenticate token');
       }
-      if (result.length === 0) {
-        console.log(`No time slots found for patient with ID ${patient_id}`);
-        res.status(404).send(`No time slots found for patient with ID ${patient_id}`);
-        return;
-      }
-      res.status(200).json(result);
-    });
+
+      const id = decoded.userId;
+  
+      const sql = 'SELECT * FROM time_slots WHERE patient_id = ?';
+      db.query(sql, [id], (err, result) => {
+        if (err) {
+          console.error(`Error fetching time slots for patient (${id}):`, err.code, "-", err.message);
+          res.status(500).send(`Failed to fetch time slots for patient (${id})`);
+          return;
+        }
+        if (result.length === 0) {
+          console.log(`No time slots found for patient with ID ${id}`);
+          res.status(404).send(`No time slots found for patient with ID ${id}`);
+          return;
+        }
+        res.status(200).json(result);
+      });
+  });
   };
   
   // to get timeSlots by DateTime

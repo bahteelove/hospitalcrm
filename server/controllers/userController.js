@@ -20,9 +20,20 @@ db.connect((err) => {
 });
 
 const login = (req, res) => {
-    const { email, password } = req.body;
+    const { email, password, userType } = req.body;
+
+    let tableName;
+    if (userType === 'doctor') {
+        tableName = 'doctors';
+    } else if (userType === 'patient') {
+        tableName = 'patients';
+    } else if (userType === 'admin') {
+        tableName = 'admins';
+    } else {
+        return res.status(400).send('Invalid user type');
+    }
   
-    db.query('SELECT * FROM doctors WHERE email = ?', [email], (err, results) => {
+    db.query(`SELECT * FROM ${tableName} WHERE email = ?`, [email], (err, results) => {
       if (err) {
         console.log(err);
         res.status(500).send('Server error');
@@ -30,8 +41,8 @@ const login = (req, res) => {
         if (results.length > 0) {
           const user = results[0];
           if (bcrypt.compareSync(password, user.password)) {
-            const token = jwt.sign({ userId: user.doctor_id, userType: 'doctor' }, 'secret', { expiresIn: '1h' });
-            res.status(200).send({ token, userType: "doctor" });
+            const token = jwt.sign({ userId: user.id, userType: userType }, 'secret', { expiresIn: '1h' });
+            res.status(200).send({ token, userType: userType });
           } else {
             res.status(401).send('Invalid email or password');
           }

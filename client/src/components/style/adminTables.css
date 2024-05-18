@@ -2,109 +2,147 @@
 
 /* Style for the main container */
 .doctor-container {
-    margin: 20px;
-  }
-  
-  /* Style for the headings */
-  h1, h2 {
-    margin-bottom: 10px;
-  }
-  
-  /* Style for the table */
-  .doctor-table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-  
-  /* Style for table headers */
-  .table-heading {
-    background-color: #f2f2f2;
-    padding: 10px;
-    text-align: left;
-  }
-  
-  /* Style for table data */
-  .table-data {
-    padding: 10px;
-    border-bottom: 1px solid #ddd;
-  }
+  margin: 20px;
+}
 
-  td, th {
-    border: 1px solid #ddd;
-  }
+/* Style for the headings */
+h1, h2 {
+  margin-bottom: 10px;
+  font-size: 24px;
+  color: #333;
+}
 
-  /* Style for reset button */
-  .reset-btn {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    padding: 8px 12px;
-    cursor: pointer;
-    border-radius: 4px;
-  }
-  
-  /* Hover effect for delete button */
-  .reset-btn:hover {
-    background-color: #0056b3;
-  }
-  
-  /* Style for delete button */
-  .delete-btn {
-    background-color: #f44336;
-    color: white;
-    border: none;
-    padding: 8px 12px;
-    cursor: pointer;
-    border-radius: 4px;
-  }
-  
-  /* Hover effect for delete button */
-  .delete-btn:hover {
-    background-color: #d32f2f;
-  }
-  
-  /* Style for the form container */
-.add-doctor-form {
-    margin-top: 20px;
-  }
-  
-  /* Style for the form table */
-  .add-doctor-table {
-    width: 100%;
-  }
-  
-  /* Style for form labels */
-  .form-label {
-    font-weight: bold;
-    padding-right: 10px;
-  }
-  
-  /* Style for form inputs */
-  .form-input {
-    width: calc(100% - 120px); /* Adjust based on the label and input padding */
-    padding: 8px;
-    border-radius: 4px;
-    border: 1px solid #ccc;
-    box-sizing: border-box;
-  }
+/* Style for the table */
+.doctor-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
 
-  
-  /* Style for submit button */
-  .submit-btn {
-    background-color: #4CAF50;
-    color: white;
-    padding: 10px 15px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  /* Hover effect for submit button */
-  .submit-btn:hover {
-    background-color: #45a049;
-  }
-  
-  .form-select {
-    width: calc(50% - 40px);
-  }
+/* Style for table headers */
+.table-heading {
+  background-color: #f2f2f2;
+  padding: 10px;
+  text-align: left;
+  font-weight: bold;
+  color: #555;
+}
+
+/* Style for table data */
+.table-data {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+  color: #666;
+}
+
+td, th {
+  border: 1px solid #ddd;
+}
+
+/* Style for reset button */
+.reset-btn {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+.reset-btn:hover {
+  background-color: #0056b3;
+}
+
+/* Style for delete button */
+.delete-btn {
+  background-color: #f44336;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+.delete-btn:hover {
+  background-color: #d32f2f;
+}
+
+/* Style for change button */
+.change-btn {
+  background-color: #ffc107;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+.change-btn:hover {
+  background-color: #e0a800;
+}
+
+/* Style for the form container */
+.add-doctor-form, .add-timeslot-form, .add-patient-form, .add-history-form {
+  margin-top: 20px;
+}
+
+/* Style for the form table */
+.add-doctor-table, .add-timeslot-table, .add-patient-table, .add-history-table {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+/* Style for form labels */
+.form-label {
+  font-weight: bold;
+  padding-right: 10px;
+  width: 150px;
+  vertical-align: top;
+}
+
+/* Style for form inputs */
+.form-input {
+  width: calc(100% - 160px); /* Adjust based on the label and input padding */
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+  margin-bottom: 10px;
+}
+
+.form-input[type="date"], .form-input[type="number"], .form-input[type="email"], .form-input[type="text"], .form-input[type="password"], .form-input textarea, .form-input select {
+  width: calc(100% - 170px); /* Adjust based on the label and input padding */
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+
+/* Style for form textareas */
+.form-input textarea {
+  height: 100px;
+  resize: vertical;
+}
+
+/* Style for form selects */
+.form-select {
+  width: calc(50% - 40px);
+}
+
+/* Style for submit button */
+.submit-btn {
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.submit-btn:hover {
+  background-color: #45a049;
+}

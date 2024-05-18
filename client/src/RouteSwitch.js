@@ -8,7 +8,6 @@ import Admin from "./components/admin/admin";
 import PatientIn from "./components/patient/patientin";
 import DoctorIn from "./components/doctor/doctorin";
 
-import NewBooking from "./components/patient/newBooking";
 
 const RouteSwitch = () => {
   return (
@@ -16,13 +15,10 @@ const RouteSwitch = () => {
       <Routes>
         <Route path="/" element={<App />} />
 
-        <Route path="/patientin/:patientId" element={ <PatientIn /> } />
-        <Route path="/doctorin/:doctorId" element={ <DoctorIn /> } />
+        <Route path="/user/:patientId" element={ <PatientIn /> } />
+        <Route path="/welcome/:doctorId" element={ <DoctorIn /> } />
 
         <Route path="/admin" element={ <Admin /> } />
-
-        
-        <Route path="/calendar" element={ <NewBooking /> } />
         
       </Routes>
     </BrowserRouter>

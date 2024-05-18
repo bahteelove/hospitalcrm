@@ -7,17 +7,33 @@ import './style/authorization.css';
 const Authorization = () => {
     const navigate = useNavigate();
 
+    const [newPatientData, setNewPatientData] = useState({
+        patient_name: '',
+        phone_number: '',
+        birthday: '',
+        avatar: '',
+        email: '',
+        password: ''
+      });
+
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [userType, setUserType] = useState('patient');
     const [error, setError] = useState('');
 
     const [activeTab, setActiveTab] = useState('sing in')
+
+    const handleInputPatient = (event) => {
+        const { name, value } = event.target;
+        setNewPatientData({ ...newPatientData, [name]: value });
+      };
 
     const handleLogin = async () => {
         try {
           const response = await axios.post('http://localhost:3080/login', {
             email,
-            password
+            password,
+            userType
           });
           localStorage.setItem('token', response.data.token);
           localStorage.setItem('userType', response.data.userType); // Save user type
@@ -26,8 +42,11 @@ const Authorization = () => {
           // Redirect to the doctor dashboard
           if (response.data.userType === 'doctor') {
             console.log("data", response.data)
-            navigate(`/doctorin/${response.data.token}`);
+            navigate(`/welcome/${response.data.token}`);
             //window.location.href = '/admin'; // Redirect to doctor dashboard
+          } else if (response.data.userType === 'patient') {
+            console.log("data", response.data)
+            navigate(`/user/${response.data.token}`);
           }
         } catch (error) {
             if (error.response) {
@@ -47,7 +66,32 @@ const Authorization = () => {
         };
       
 
-    const handleRegister = () => { alert("maintaining...") }
+    const handleRegister = async() => { 
+        try {
+          // Check if any required field is empty
+          if (!newPatientData.patient_name || !newPatientData.email || !newPatientData.password) {
+            alert('Name, Email and Password are required');
+            return;
+          }
+      
+          // Send POST request to add a new patient
+          await axios.post('http://localhost:3080/addnewpatient', newPatientData);
+      
+          // Reset the form fields
+          setNewPatientData({
+            patient_name: '',
+            phone_number: '',
+            birthday: '',
+            avatar: '',
+            email: '',
+            password: ''
+          });
+      
+          alert('You have been registered successfully');
+        } catch (error) {
+          console.error('Error regestering user:', error);
+        }
+      };
 
     return (
         <>
@@ -69,7 +113,15 @@ const Authorization = () => {
                                 value={password} 
                                 onChange={(e) => setPassword(e.target.value)}
                             />
-                            <button className='auth-button' onClick={handleLogin} >Sing In</button>
+                            <select 
+                                className="auth-input" 
+                                value={userType} 
+                                onChange={(e) => setUserType(e.target.value)}
+                            >
+                                <option value="doctor">I'm a Doctor</option>
+                                <option value="patient">I'm a Patient</option>
+                            </select>
+                            <button className='auth-button' onClick={handleLogin} >Log In</button>
                             <a onClick={() => setActiveTab("registration")}> Don't have an account? </a>
                             {error && <p className="error">{error}</p>}
                         
@@ -82,19 +134,25 @@ const Authorization = () => {
                             className='auth-input'
                             type="text"
                             placeholder="Enter your full name"
-                            required
+                            name="patient_name"
+                            value={newPatientData.patient_name}
+                            onChange={handleInputPatient}
                         />
                         <input
                             className='auth-input'
                             type="email"
                             placeholder="Enter your e-mail"
-                            required
+                            name="email"
+                            value={newPatientData.email}
+                            onChange={handleInputPatient}
                         />
                         <input
                             className='auth-input'
                             type="text"
                             placeholder="Enter your password"
-                            required
+                            name="password"
+                            value={newPatientData.password}
+                            onChange={handleInputPatient}
                         />
                         <button className='auth-button' type="submit">Sing In</button>
                         <a onClick={() => setActiveTab("sing in")}> I hava an account </a>

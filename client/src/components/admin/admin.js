@@ -13,15 +13,20 @@ function Admin() {
 
   return (
     <div className="admin-container">
-      <button className={`module-button ${activeTab === "Doctor" ? "active" : ""}`} onClick={() => setActiveTab("Doctor")}>Doctor</button>
-      <button className={`module-button ${activeTab === "TimeSlots" ? "active" : ""}`} onClick={() => setActiveTab("TimeSlots")}>Time Slots</button>
-      <button className={`module-button ${activeTab === "Patient" ? "active" : ""}`} onClick={() => setActiveTab("Patient")}>Patient</button>
-      <button className={`module-button ${activeTab === "PatientHistory" ? "active" : ""}`} onClick={() => setActiveTab("PatientHistory")}>Patient History</button>
+      <div>
+        <button className={`module-button ${activeTab === "Doctor" ? "active" : ""}`} onClick={() => setActiveTab("Doctor")}>Doctor</button>
+        <button className={`module-button ${activeTab === "TimeSlots" ? "active" : ""}`} onClick={() => setActiveTab("TimeSlots")}>Time Slots</button>
+        <button className={`module-button ${activeTab === "Patient" ? "active" : ""}`} onClick={() => setActiveTab("Patient")}>Patient</button>
+        <button className={`module-button ${activeTab === "PatientHistory" ? "active" : ""}`} onClick={() => setActiveTab("PatientHistory")}>Patient History</button>
 
-      {activeTab === "Doctor" && <Doctor />}
-      {activeTab === "TimeSlots" && <TimeSlots />}
-      {activeTab === "Patient" && <Patient />}
-      {activeTab === "PatientHistory" && <PatientHistory />}
+      </div>
+      
+      <div>
+        {activeTab === "Doctor" && <Doctor />}
+        {activeTab === "TimeSlots" && <TimeSlots />}
+        {activeTab === "Patient" && <Patient />}
+        {activeTab === "PatientHistory" && <PatientHistory />}
+      </div>
     </div>
   );
 }

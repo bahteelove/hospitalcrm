@@ -7,7 +7,7 @@ import DoctorReport from './doctorReport';
 import '../style/doctorin.css'; // Import CSS file for styling 
 
 const DoctorIn = () => {
-    const navigate = useNavigate();   
+    const navigate = useNavigate(); 
 
     const [activeNavbar, setActiveNavbar] = useState('schedule'); // active status "schedule"
 
@@ -17,7 +17,6 @@ const DoctorIn = () => {
     };
 
     const getQuit = () => { navigate(`/`); }
-
 
     return (
         <>

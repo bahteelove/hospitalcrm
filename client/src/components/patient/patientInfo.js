@@ -16,7 +16,8 @@ const PatientInfo = () => {
         email: '',
         phone_number: '',
         birthday: '',
-        avatar: ''
+        avatar: '',
+        password: ''
     });
 
     const [patient, setPatient] = useState([]);
@@ -90,7 +91,8 @@ const PatientInfo = () => {
             email: '',
             phone_number: '',
             birthday: '',
-            avatar: ''
+            avatar: '',
+            password: ''
           });
       
           alert('Patient Info has been changed successfully');
@@ -124,6 +126,10 @@ const PatientInfo = () => {
                                     <td>{patient.email}</td>
                                 </tr>
                                 <tr>
+                                    <td><strong>Password:</strong></td>
+                                    <td>{patient.password}</td>
+                                </tr>
+                                <tr>
                                     <td><strong>Phone:</strong></td>
                                     <td>{patient.phone_number}</td>
                                 </tr>
@@ -145,6 +151,10 @@ const PatientInfo = () => {
                                     <td><input className='patient-information-change-input' type="email" name="email" placeholder={patient.email} value={newPatientData.email} onChange={handleInputChangePatient} /></td>
                                 </tr>
                                 <tr>
+                                    <td>Password</td>
+                                    <td><input className='patient-information-change-input' type="text" name="password" placeholder={patient.password} value={newPatientData.password} onChange={handleInputChangePatient} /></td>
+                                </tr>
+                                <tr>
                                     <td >Phone Number</td>
                                     <td><input className='patient-information-change-input' type="number" name="phone_number" placeholder={patient.phone_number} value={newPatientData.phone_number} onChange={handleInputChangePatient} /></td>
                                 </tr>
@@ -162,6 +172,8 @@ const PatientInfo = () => {
             </div>
             <div className="upcoming-appointments-panel">
                 <h2>Upcoming Appointments</h2>
+                { timeSlotsData.length > 0 
+                ?
                 <div className="appointments-list">
                     {timeSlotsData.map(slot => (
                         <div key={slot.id} className="appointment-item">
@@ -173,6 +185,8 @@ const PatientInfo = () => {
                         </div>
                     ))}
                 </div>
+                : <p> No events yet </p> }
+                
             </div>
         </>
     );

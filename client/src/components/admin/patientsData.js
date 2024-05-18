@@ -12,7 +12,8 @@ function Patient() {
       email: '',
       phone_number: '',
       birthday: '',
-      avatar: ''
+      avatar: '',
+      password: ''
     });
   
     useEffect(() => {
@@ -45,8 +46,8 @@ function Patient() {
     setNewPatientData({ ...newPatientData, [name]: value });
   };
 
-  const isTimeSlotWithPatientExist = (patient_id) => {
-    return timeSlots.some(timeSlot => timeSlot.patient_id === patient_id);
+  const isTimeSlotWithPatientExist = (id) => {
+    return timeSlots.some(timeSlot => timeSlot.id === id);
   };
 
   const addNewPatient = async () => {
@@ -78,14 +79,14 @@ function Patient() {
     }
   };
 
-  const deletePatient = async(patient_id) => {
-    if (isTimeSlotWithPatientExist(patient_id)) {
-      alert("cannot delete this patient, coz this patient had booked an appointment, so if you want to delete this patient so badly you need first delete slot with this patient (patient_id)")
+  const deletePatient = async(id) => {
+    if (isTimeSlotWithPatientExist(id)) {
+      alert("cannot delete this patient, coz this patient had booked an appointment, so if you want to delete this patient so badly you need first delete slot with this patient (id)")
     } else {
       try {
-        await axios.delete(`http://localhost:3080/deletepatient/${(patient_id)}`);
+        await axios.delete(`http://localhost:3080/deletepatient/${(id)}`);
         fetchPatients(); // Refresh data
-        console.log(`Time Slot with ID ${patient_id} has been deleted`);
+        console.log(`Time Slot with ID ${id} has been deleted`);
       } catch (error) {
         console.error('Error:', error);
       }
@@ -110,14 +111,14 @@ function Patient() {
         </thead>
         <tbody>
           {patients.map(patient => (
-            <tr key={patient.patient_id}>
-              <td className="table-data">{patient.patient_id}</td>
+            <tr key={patient.id}>
+              <td className="table-data">{patient.id}</td>
               <td className="table-data">{patient.patient_name}</td>
               <td className="table-data">{patient.email}</td>
               <td className="table-data">{patient.phone_number}</td>
               <td className="table-data">{patient.birthday}</td>
               <td className="table-data">{patient.avatar}</td>
-              <td className="table-data"><button className="delete-btn" onClick={() => deletePatient(patient.patient_id)}>Delete</button></td>
+              <td className="table-data"><button className="delete-btn" onClick={() => deletePatient(patient.id)}>Delete</button></td>
             </tr>
           ))}
         </tbody>

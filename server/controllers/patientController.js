@@ -25,7 +25,7 @@ db.connect((err) => {
 // Create Patients Table
 // GET /createpatientstable
 const createPatientsTable = (req, res) => {
-    let sql = 'CREATE TABLE patients (patient_id INT AUTO_INCREMENT PRIMARY KEY, patient_name VARCHAR(255), notes TEXT)';
+    let sql = 'CREATE TABLE patients (id INT AUTO_INCREMENT PRIMARY KEY, patient_name VARCHAR(255), notes TEXT)';
     db.query(sql, (err, result) => {
       if (err) {
         console.error("Error creating <patients> table:", err.code, "-", err.message);
@@ -40,7 +40,7 @@ const createPatientsTable = (req, res) => {
 // Alter Patient Table to add a column
 // GET /alterpatienttable
 const alterPatientTable = (req, res) => {
-  let sql = 'ALTER TABLE patients ADD COLUMN password VARCHAR(255)';
+  let sql = 'ALTER TABLE patients RENAME COLUMN patient_id TO id';
   db.query(sql, (err, result) => {
       if (err) {
           console.error("Error altering <patient> table:", err.code, "-", err.message);
@@ -83,24 +83,32 @@ const deletePatientColumn = (req, res) => {
   };
   
   // get selected patient
-  // GET /getselectedpatient/:patient_id
+  // GET /getselectedpatient/:token
   const getSelectedPatient = (req, res) => {
-    const { patient_id } = req.params;
-  
-    const sql = 'SELECT * FROM patients WHERE patient_id = ?';
-    db.query(sql, [patient_id], (err, result) => {
+    const { token } = req.params;
+
+    jwt.verify(token, 'secret', (err, decoded) => {
       if (err) {
-        console.error(`Error retrieving patient (${patient_id}):`, err);
-        res.status(500).send(`Error retrieving patient (${patient_id})`);
-        return;
+        return res.status(500).send('Failed to authenticate token');
       }
-      if (result.length === 0) {
-        console.log(`Patient with ID ${patient_id} not found`);
-        res.status(404).send(`Patient with ID ${patient_id} not found`);
-        return;
-      }
-      console.log(`Patient (${patient_id}) retrieved successfully`);
-      res.json(result[0]); // Assuming you want to return the first (and only) result
+
+      const patient_id = decoded.userId;
+  
+      const sql = 'SELECT * FROM patients WHERE id = ?';
+      db.query(sql, [patient_id], (err, result) => {
+        if (err) {
+          console.error(`Error retrieving patient (${patient_id}):`, err);
+          res.status(500).send(`Error retrieving patient (${patient_id})`);
+          return;
+        }
+        if (result.length === 0) {
+          console.log(`Patient with ID ${patient_id} not found`);
+          res.status(404).send(`Patient with ID ${patient_id} not found`);
+          return;
+        }
+        console.log(`Patient (${patient_id}) retrieved successfully`);
+        res.json(result[0]); // Assuming you want to return the first (and only) result
+      });
     });
   };
   
@@ -128,9 +136,11 @@ const deletePatientColumn = (req, res) => {
   const changePatientInfo = (req, res) => {
     const { patient_id } = req.params;
     const { patient_name, phone_number, avatar, birthday, email, password } = req.body;
+
+    const hashedPassword = bcrypt.hashSync(password, 10);
   
-    const sql = 'UPDATE patients SET patient_name = ?, phone_number = ?, avatar = ?, birthday = ?, email = ?, password = ? WHERE patient_id = ?';
-    db.query(sql, [patient_name, phone_number, avatar, birthday, email, password], (err, result) => {
+    const sql = 'UPDATE patients SET patient_name = ?, phone_number = ?, avatar = ?, birthday = ?, email = ?, password = ? WHERE id = ?';
+    db.query(sql, [patient_name, phone_number, avatar, birthday, email, hashedPassword, patient_id], (err, result) => {
       if (err) {
         console.error(`Error changing the patient (${patient_name}) with ID ${patient_id}:`, err);
         res.status(500).send(`Error changing the patient (${patient_name}) with ID ${patient_id}`);
@@ -161,7 +171,7 @@ const deletePatientColumn = (req, res) => {
   const deletePatient = (req, res) => {
     const { patient_id } = req.params;
   
-    const sql = 'DELETE FROM patients WHERE patient_id = ?';
+    const sql = 'DELETE FROM patients WHERE id = ?';
     db.query(sql, [patient_id], (err, result) => {
       if (err) {
         console.error(`Error deleting patient (${patient_id}):`, err);

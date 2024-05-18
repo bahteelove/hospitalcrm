@@ -1,27 +1,214 @@
-<div>
-    <h2>Patient Info</h2>
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const mysql = require('mysql');
 
-    <table className="add-doctor-table">
-    <tbody>
-        <tr>
-        <td className="form-label">Name</td>
-        <td><input className="form-input" type="text" name="patient_name" value={newPatientData.patient_name} onChange={handleInputChangePatient} /></td>
-        </tr>
-        <tr>
-        <td className="form-label">Email</td>
-        <td><input className="form-input" type="email" name="email" value={newPatientData.email} onChange={handleInputChangePatient} /></td>
-        </tr>
-        <tr>
-        <td className="form-label">Phone Number</td>
-        <td><input className="form-input" type="number" name="phone_number" value={newPatientData.phone_number} onChange={handleInputChangePatient} /></td>
-        </tr>
-        <tr>
-        <td className="form-label">Birthday</td>
-        <td><input className="form-input" type="date" name="birthday" value={newPatientData.birthday} onChange={handleInputChangePatient} /></td>
-        </tr>
-        
-    </tbody>
-    </table>
 
-    <button className="submit-btn" >Change Data</button>
-</div>
+// Create a database connection
+const db = mysql.createConnection({
+    host: "localhost",
+    user: "root",
+    password: "123456",
+    database: "hospital_db"
+});
+
+// Connect to the database
+db.connect((err) => {
+    if (err) {
+    console.error("Error connecting to MySQL:", err);
+    return;
+    }
+    console.log("MySQL [patientController] is connected");
+});
+
+// -------------------------------------------------------------------------------
+
+// Create Patients Table
+// GET /createpatientstable
+const createPatientsTable = (req, res) => {
+    let sql = 'CREATE TABLE patients (patient_id INT AUTO_INCREMENT PRIMARY KEY, patient_name VARCHAR(255), notes TEXT)';
+    db.query(sql, (err, result) => {
+      if (err) {
+        console.error("Error creating <patients> table:", err.code, "-", err.message);
+        res.status(500).send('<patients> table creation has failed');
+        return;
+      }
+      console.log("<patients> table has created:", result);
+      res.send("<patients> table has created");
+    });
+  };
+
+// Alter Patient Table to add a column
+// GET /alterpatienttable
+const alterPatientTable = (req, res) => {
+  let sql = 'ALTER TABLE patients RENAME COLUMN patient_id TO id';
+  db.query(sql, (err, result) => {
+      if (err) {
+          console.error("Error altering <patient> table:", err.code, "-", err.message);
+          res.status(500).send('<patient> table alteration has failed');
+          return;
+      }
+      console.log("<patient> table has been altered to add column doctor_name");
+      res.send("<patient> table has been altered to add column doctor_name");
+  });
+};
+
+// Delete a column from the patient table
+// GET /deletepatientcolum
+const deletePatientColumn = (req, res) => {
+  let sql = 'ALTER TABLE patients DROP COLUMN notes';
+  db.query(sql, (err, result) => {
+      if (err) {
+          console.error("Error deleting column from patient table:", err.code, "-", err.message);
+          res.status(500).send("Failed to delete column from patient table");
+          return;
+      }
+      console.log("Column has been deleted from the patient table");
+      res.send("Column has been deleted from the patient table");
+  });
+};
+  
+  // Get Patients Data
+  // GET /getpatientstable
+  const getPatientsData = (req, res) => {
+    let sql = 'SELECT * FROM patients';
+    db.query(sql, (err, result) => {
+        if (err) {
+        console.error("Error fetching <patients> info:", err.code, "-", err.message);
+        res.status(500).send('Failed to fetch <patients> info');
+        return;
+        }
+        console.log("<patients> info:", result);
+        res.send(result);
+    });
+  };
+  
+  // get selected patient
+  // GET /getselectedpatient/:token
+  const getSelectedPatient = (req, res) => {
+    const { token } = req.params;
+
+    jwt.verify(token, 'secret', (err, decoded) => {
+      if (err) {
+        return res.status(500).send('Failed to authenticate token');
+      }
+
+      const patient_id = decoded.userId
+  
+    const sql = 'SELECT * FROM patients WHERE patient_id = ?';
+    db.query(sql, [patient_id], (err, result) => {
+      if (err) {
+        console.error(`Error retrieving patient (${patient_id}):`, err);
+        res.status(500).send(`Error retrieving patient (${patient_id})`);
+        return;
+      }
+      if (result.length === 0) {
+        console.log(`Patient with ID ${patient_id} not found`);
+        res.status(404).send(`Patient with ID ${patient_id} not found`);
+        return;
+      }
+      console.log(`Patient (${patient_id}) retrieved successfully`);
+      res.json(result[0]); // Assuming you want to return the first (and only) result
+    });
+  });
+  };
+  
+  // Add New Patient
+  // POST /addnewpatient
+  const addNewPatient = (req, res) => {
+    const { patient_name, phone_number, avatar, birthday, email, password } = req.body;
+  
+    const hashedPassword = bcrypt.hashSync(password, 10);
+    const user = { patient_name, phone_number, avatar, birthday, email, password: hashedPassword };
+
+    db.query('INSERT INTO patients SET ?', user, (err, result) => {
+      if (err) {
+        console.error(`Error registering patient (${patient_name}):`, err);
+        res.status(500).send(`Error registering patient (${patient_name})`);
+        return;
+      }
+      console.log(`new patient (${patient_name}) registered successfully`);
+      res.send(`new patient (${patient_name}) registered successfully`);
+    });
+  };
+
+  // change patient info
+  // POST /changepatientinfo/:patient_id
+  const changePatientInfo = (req, res) => {
+    const { patient_id } = req.params;
+    const { patient_name, phone_number, avatar, birthday, email, password } = req.body;
+
+    const hashedPassword = bcrypt.hashSync(password, 10);
+  
+    const sql = 'UPDATE patients SET patient_name = ?, phone_number = ?, avatar = ?, birthday = ?, email = ?, password = ? WHERE patient_id = ?';
+    db.query(sql, [patient_name, phone_number, avatar, birthday, email, hashedPassword, patient_id], (err, result) => {
+      if (err) {
+        console.error(`Error changing the patient (${patient_name}) with ID ${patient_id}:`, err);
+        res.status(500).send(`Error changing the patient (${patient_name}) with ID ${patient_id}`);
+        return;
+      }
+      console.log(`new patient (${patient_name}) with ID ${patient_id} added successfully`);
+      res.send(`new patient (${patient_name}) with ID ${patient_id} added successfully`);
+    });
+  };
+  
+  // Add Empty Patient
+  // POST //addemptypatient
+  const addEmptyPatient = (req, res) => {
+    const sql = 'INSERT INTO patients (patient_name, notes) VALUES ("", "")';
+    db.query(sql, (err, result) => {
+      if (err) {
+        console.error('Error adding empty patient:', err);
+        res.status(500).send('Failed to add empty patient');
+        return;
+      }
+      console.log('Empty patient added successfully');
+      res.send('Empty patient added successfully');
+    });
+  };
+  
+  // Delete Patient
+  // DELETE /deletepatient/:patient_id
+  const deletePatient = (req, res) => {
+    const { patient_id } = req.params;
+  
+    const sql = 'DELETE FROM patients WHERE patient_id = ?';
+    db.query(sql, [patient_id], (err, result) => {
+      if (err) {
+        console.error(`Error deleting patient (${patient_id}):`, err);
+        res.status(500).send(`Error deleting patient (${patient_id})`);
+        return;
+      }
+      console.log(`patient (${patient_id}) deleted successfully`);
+      res.send(`patient (${patient_id}) deleted successfully`);
+    });
+  };
+  
+  // Delete Null Patients
+  // DELETE /deletenullpatients
+  const deleteNullPatients = (req, res) => {
+    const sql = 'DELETE FROM patients WHERE patient_name = "" OR patient_name IS NULL';
+    db.query(sql, (err, result) => {
+      if (err) {
+        console.error('Error deleting null patients:', err);
+        res.status(500).send('Failed to delete null patients');
+        return;
+      }
+      console.log('Null patients deleted successfully');
+      res.send('Null patients deleted successfully');
+    });
+  };
+  
+
+module.exports = { 
+    createPatientsTable,
+  getPatientsData,
+  addNewPatient,
+  addEmptyPatient,
+  deletePatient,
+  deleteNullPatients,
+  getSelectedPatient,
+  alterPatientTable,
+  deletePatientColumn,
+
+  changePatientInfo
+ }

@@ -23,7 +23,7 @@ db.connect((err) => {
 // to crate doctors table
 // GET /createdoctorstable
 const createDoctorsTable = (req, res) => {
-    let sql = 'CREATE TABLE doctors (doctor_id INT AUTO_INCREMENT, doctor_name VARCHAR(255), specialization VARCHAR(255), avatar VARCHAR(255), PRIMARY KEY (doctor_id))';
+    let sql = 'CREATE TABLE doctors (id INT AUTO_INCREMENT, doctor_name VARCHAR(255), specialization VARCHAR(255), avatar VARCHAR(255), PRIMARY KEY (doctor_id))';
     db.query(sql, (err, result) => {
       if (err) {
         console.error("Error creating <doctors> table:", err.code, "-", err.message);
@@ -53,7 +53,7 @@ const createDoctorsTable = (req, res) => {
   // Alter Doctor Table to add a column
   // GET /alterDoctorTable
   const alterDoctorTable = (req, res) => {
-    let sql = 'ALTER TABLE doctors ADD COLUMN password VARCHAR(255)';
+    let sql = 'ALTER TABLE doctors RENAME COLUMN id TO id';
     db.query(sql, (err, result) => {
         if (err) {
             console.error("Error altering <doctors> table:", err.code, "-", err.message);
@@ -101,7 +101,7 @@ const createDoctorsTable = (req, res) => {
       const doctor_id = decoded.userId; // Extract doctor_id from decoded token
   
       // Fetch the selected doctor's information from the database using the doctor_id
-      db.query('SELECT * FROM doctors WHERE doctor_id = ?', [doctor_id], (err, result) => {
+      db.query('SELECT * FROM doctors WHERE id = ?', [doctor_id], (err, result) => {
         if (err) {
           console.error(`Error fetching doctor (${doctor_id}) info:`, err.code, "-", err.message);
           res.status(500).send(`Failed to fetch doctor (${doctor_id}) info`);
@@ -161,7 +161,7 @@ const createDoctorsTable = (req, res) => {
     
     const hashedPassword = bcrypt.hashSync(password, 10);
   
-    const sql = 'UPDATE doctors SET doctor_name = ?, specialization = ?, avatar = ?, email = ?, password = ? WHERE doctor_id = ?';
+    const sql = 'UPDATE doctors SET doctor_name = ?, specialization = ?, avatar = ?, email = ?, password = ? WHERE id = ?';
     db.query(sql, [doctor_name, specialization, avatar, email, hashedPassword, doctor_id], (err, result) => {
       if (err) {
         console.error(`Error changing the doctor (${doctor_name}) with ID ${doctor_id}:`, err);
@@ -174,18 +174,18 @@ const createDoctorsTable = (req, res) => {
   };
   
   // to delete a doctor
-  // DELETE deletedoctor/:doctor_name
+  // GET deletedoctor/:id
   const deleteDoctor = (req, res) => {
-      const doctor_name = req.params.doctor_name;
-      let sql = 'DELETE FROM doctors WHERE doctor_name = ?';
-      db.query(sql, [doctor_name], (err, result) => {
+      const {id} = req.params;
+      let sql = 'DELETE FROM doctors WHERE id = ?';
+      db.query(sql, [id], (err, result) => {
           if (err) {
-          console.error(`Error deleting doctor (${doctor_name}):`, err.code, "-", err.message);
+          console.error(`Error deleting doctor (${id}):`, err.code, "-", err.message);
           res.status(500).send('Failed to delete doctor');
           return;
           }
           console.log("doctor deleted successfully");
-          res.send(`doctor (${doctor_name}) deleted successfully`);
+          res.send(`doctor (${id}) deleted successfully`);
       });
   };
   

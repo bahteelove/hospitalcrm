@@ -17,7 +17,7 @@ function Doctor() {
   });
 
   const [lastDoctorData, setLastDoctorData] = useState({
-    doctor_id: '',
+    id: '',
     doctor_name: '',
     specialization: '',
     avatar: '',
@@ -35,7 +35,7 @@ function Doctor() {
 
   const [timeSlots, setTimeSlots] = useState([]);
   const [newTimeSlotData, setNewTimeSlotData] = useState({
-    doctor_id: '',
+    id: '',
     time: '',
     status: '',
     patient_id: ''
@@ -66,8 +66,8 @@ function Doctor() {
       });
   };
 
-  const isTimeSlotWithDoctorExist = (doctor_id) => {
-    return timeSlots.some(timeSlot => timeSlot.doctor_id === doctor_id);
+  const isTimeSlotWithDoctorExist = (id) => {
+    return timeSlots.some(timeSlot => timeSlot.doctor_id === id);
   };
 
   const handleInputChangeDoctor = (event) => {
@@ -117,22 +117,22 @@ function Doctor() {
     }
   };
 
-  const deleteDoctor = async (doctor_id, doctor_name) => {
-    if (isTimeSlotWithDoctorExist(doctor_id)) {
-      alert("cannot delete this doctor, coz this doctor already has a booken appointment, so if you want to delete this doctor so badly you need first delete slot with this doctor (doctor_id)")
+  const deleteDoctor = async (id) => {
+    if (isTimeSlotWithDoctorExist(id)) {
+      alert("cannot delete this doctor, coz this doctor already has a booken appointment, so if you want to delete this doctor so badly you need first delete slot with this doctor (id)")
     } else {
         try {
-          await axios.delete(`http://localhost:3080/deletedoctor/${doctor_name}`);
+          await axios.get(`http://localhost:3080/deletedoctor/${id}`);
           fetchDoctors(); // Refresh data
-          console.log(`Doctor with ID ${doctor_name} has been deleted`);
+          console.log(`Doctor with ID ${id} has been deleted`);
         } catch (error) {
           console.error('Error:', error);
         }
     }
   };
 
-  const changeButton = (doctor_id, doctor_name, specialization, avatar, email, password) => {
-    lastDoctorData.doctor_id = doctor_id;
+  const changeButton = (id, doctor_name, specialization, avatar, email, password) => {
+    lastDoctorData.id = id;
     lastDoctorData.doctor_name = doctor_name;
     lastDoctorData.specialization = specialization;
     lastDoctorData.avatar = avatar;
@@ -144,13 +144,13 @@ function Doctor() {
     setActiveTab("")
   }
 
-  const handleChange = async(doctor_id, e) => {
+  const handleChange = async(id, e) => {
     e.preventDefault(); // Prevent default form submission
     try {
-      await axios.post(`http://localhost:3080/changeDoctorInfo/${doctor_id}`, changeDoctorData);
+      await axios.post(`http://localhost:3080/changeDoctorInfo/${id}`, changeDoctorData);
       fetchDoctors(); // Refresh data
       setActiveTab('new')
-      console.log(`Doctor with ID ${doctor_id} has been changed`);
+      console.log(`Doctor with ID ${id} has been changed`);
     } catch (error) {
       console.error('Error:', error);
     }
@@ -174,18 +174,18 @@ function Doctor() {
         </thead>
         <tbody>
           {doctors.map(doctor => (
-            <tr key={doctor.doctor_id}>
-              <td className="table-data">{doctor.doctor_id}</td>
+            <tr key={doctor.id}>
+              <td className="table-data">{doctor.id}</td>
               <td className="table-data">{doctor.doctor_name}</td>
               <td className="table-data">{doctor.specialization}</td>
               <td className="table-data">{doctor.avatar}</td>
               <td className="table-data">{doctor.email}</td>
               <td className="table-data">{doctor.password}</td>
               <td className="table-data">
-                <button className="delete-btn" onClick={() => deleteDoctor(doctor.doctor_id, doctor.doctor_name)}>Delete</button>
+                <button className="delete-btn" onClick={() => deleteDoctor(doctor.id)}>Delete</button>
               </td>
               <td className="table-data">
-                <button className="delete-btn" onClick={() => changeButton(doctor.doctor_id, doctor.doctor_name, doctor.specialization, doctor.avatar, doctor.email, doctor.password)}>change</button>
+                <button className="delete-btn" onClick={() => changeButton(doctor.id, doctor.doctor_name, doctor.specialization, doctor.avatar, doctor.email, doctor.password)}>change</button>
               </td>
             </tr>
           ))}
@@ -211,11 +211,11 @@ function Doctor() {
                 <td><input className="form-input" type="text" name="avatar" value={newDoctorData.avatar} onChange={handleInputNewDoctor} /></td>
               </tr>
               <tr>
-                <td className="form-label">Avatar:</td>
+                <td className="form-label">E-mail:</td>
                 <td><input className="form-input" type="email" name="email" value={newDoctorData.email} onChange={handleInputNewDoctor} /></td>
               </tr>
               <tr>
-                <td className="form-label">Avatar:</td>
+                <td className="form-label">Password:</td>
                 <td><input className="form-input" type="text" name="password" value={newDoctorData.password} onChange={handleInputNewDoctor} /></td>
               </tr>
             </tbody>
@@ -225,7 +225,7 @@ function Doctor() {
       </> :
       <>
         <h2>Change Doctor's Info</h2>
-        <form className="add-doctor-form" onSubmit={(e) => handleChange(lastDoctorData.doctor_id, e)}>
+        <form className="add-doctor-form" onSubmit={(e) => handleChange(lastDoctorData.id, e)}>
           <table className="add-doctor-table">
             <tbody>
               <tr>
@@ -241,11 +241,11 @@ function Doctor() {
                 <td><input className="form-input" type="text" name="avatar" value={changeDoctorData.avatar} onChange={handleInputChangeDoctor} /></td>
               </tr>
               <tr>
-                <td className="form-label">Avatar:</td>
+                <td className="form-label">E-mail:</td>
                 <td><input className="form-input" type="email" name="email" value={changeDoctorData.email} onChange={handleInputChangeDoctor} /></td>
               </tr>
               <tr>
-                <td className="form-label">Avatar:</td>
+                <td className="form-label">Password:</td>
                 <td><input className="form-input" type="text" name="password" value={changeDoctorData.password} onChange={handleInputChangeDoctor} /></td>
               </tr>
             </tbody>

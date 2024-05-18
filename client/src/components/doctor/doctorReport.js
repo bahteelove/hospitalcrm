@@ -83,7 +83,7 @@ const DoctorReport = () => {
         });
     
         doc.save("appointment_report.pdf");
-        window.location.reload()
+        
     };
 
     return (
