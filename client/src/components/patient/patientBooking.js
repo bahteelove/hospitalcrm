@@ -13,7 +13,7 @@ const PatientBooking = () => {
     const { patientId } = useParams();
     
     const [selectedDoctor, setSelectedDoctor] = useState({
-        doctor_id : "",
+        id : "",
         doctor_name : "",
         specialization : "",
         avatar : ""
@@ -84,7 +84,7 @@ const PatientBooking = () => {
                 return (
                     timeSlot.status === 'taken' &&
                     timeSlot.patient_id === parseInt(patientId) &&
-                    timeSlot.doctor_id === selectedDoctor.doctor_id
+                    timeSlot.doctor_id === selectedDoctor.id
                 );
             });
     
@@ -119,8 +119,8 @@ const PatientBooking = () => {
             }
 
             const slotStatus = {
-                patient_id: patient.patient_id, 
-                patient_name: patient.patient_name,
+                id: patient.id, 
+                id: patient.id,
                 status: "taken", 
                 status_time: getCurrentDateTime()
             }
@@ -143,7 +143,7 @@ const PatientBooking = () => {
                 <div className="doctor-cards">
                     <label>Choose Doctor:</label>
                     {doctors && doctors.map((doctor) => (
-                        <div className="doctor-card" key={doctor.doctor_id} onClick={() => handleDoctorSelect(doctor)}>
+                        <div className="doctor-card" key={doctor.id} onClick={() => handleDoctorSelect(doctor)}>
                             <img src={doctor.avatar} alt={doctor.doctor_name} />
                             <div className="doctor-info">
                                 <h3>{doctor.doctor_name}</h3>
@@ -153,8 +153,8 @@ const PatientBooking = () => {
                                 className='patient-booking-input'
                                 type="radio"
                                 name="doctor"
-                                value={doctor.doctor_id}
-                                checked={selectedDoctor.doctor_id === doctor.doctor_id}
+                                value={doctor.id}
+                                checked={selectedDoctor.id === doctor.id}
                                 onChange={() => setSelectedDoctor(doctor)}
                             />
                         </div>
@@ -165,7 +165,7 @@ const PatientBooking = () => {
                         <label>Available Time Slots for {selectedDoctor.doctor_name}:</label>
                         
                         {timeSlotsData
-                            .filter(timeSlot => timeSlot.doctor_id === selectedDoctor.doctor_id) // Filter time slots by doctor_id
+                            .filter(timeSlot => timeSlot.doctor_id === selectedDoctor.id) // Filter time slots by id
                             .map((timeSlot, index) => (
                                 <div
                                     className={`time-slot ${timeSlot.status === 'taken' || timeSlot.status === 'done' ? 'taken' : ''}`}

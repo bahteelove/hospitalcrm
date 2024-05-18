@@ -107,7 +107,7 @@ const DoctorPatientReport = (props) => {
     };
 
     const handleMarkAsDone = () => {
-        axios.post(`http://localhost:3080/changeslotstatus/${slotId}`, { patient_id: selectedPatient.patient_id, patient_name: selectedPatient.patient_name, status: "done", status_time: getCurrentDateTime() })
+        axios.post(`http://localhost:3080/changeslotstatus/${slotId}`, { patient_id: selectedPatient.id, patient_name: selectedPatient.patient_name, status: "done", status_time: getCurrentDateTime() })
             
             .catch(error => {
                 console.error('Error adding new patient history:', error);

@@ -61,12 +61,12 @@ function PatientHistory() {
     if (name === 'doctor_name') {
       const selectedDoctor = doctors.find(doctor => doctor.doctor_name === value);
       if (selectedDoctor) {
-        setNewHistoryData({ ...newHistoryData, [name]: value, doctor_id: selectedDoctor.doctor_id });
+        setNewHistoryData({ ...newHistoryData, [name]: value, doctor_id: selectedDoctor.id });
       }
     } else if (name === 'patient_name') {
       const selectedPatient = patients.find(patient => patient.patient_name === value);
       if (selectedPatient) {
-        setNewHistoryData({ ...newHistoryData, [name]: value, patient_id: selectedPatient.patient_id });
+        setNewHistoryData({ ...newHistoryData, [name]: value, patient_id: selectedPatient.id });
       }
     } else {
       setNewHistoryData({ ...newHistoryData, [name]: value });
